@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NextLink from 'next/link';
 import { Box, Drawer, useMediaQuery, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
@@ -6,8 +6,14 @@ import { useRouter } from 'next/router';
 import LogoIcon from '../logo/LogoIcon';
 import Menuitems from './MenuItems';
 
-const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
-  const [open, setOpen] = React.useState(true);
+interface Props {
+  isMobileSidebarOpen: boolean;
+  onSidebarClose: () => void;
+  isSidebarOpen: boolean;
+}
+
+const Sidebar: React.FC<Props> = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
+  const [open, setOpen] = useState(true);
 
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 
