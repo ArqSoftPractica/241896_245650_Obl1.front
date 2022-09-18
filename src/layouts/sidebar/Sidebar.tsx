@@ -13,7 +13,7 @@ interface Props {
 }
 
 const Sidebar: React.FC<Props> = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState<boolean>(true);
 
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 
