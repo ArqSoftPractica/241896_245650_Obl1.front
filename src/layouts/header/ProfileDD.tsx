@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Box, Menu, Typography, Link, ListItemButton, List, ListItemText, Button, Divider } from '@mui/material';
 import userimg from '../../../assets/images/users/user2.jpg';
 
-const ProfileDD = () => {
+const ProfileDD: React.FC<Record<string, never>> = () => {
   const [anchorEl4, setAnchorEl4] = React.useState(null);
 
   const handleClick4 = (event) => {
@@ -24,7 +24,7 @@ const ProfileDD = () => {
         onClick={handleClick4}
       >
         <Box display="flex" alignItems="center">
-          <Image src={userimg} alt={userimg} width="30" height="30" className="roundedCircle" />
+          <Image src={userimg} alt="Image" width="30" height="30" className="roundedCircle" />
           <Box
             sx={{
               display: {

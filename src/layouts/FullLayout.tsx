@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { experimentalStyled, useMediaQuery, Container, Box } from '@mui/material';
 import Header from './header/Header';
 import Sidebar from './sidebar/Sidebar';
@@ -25,10 +25,15 @@ const PageWrapper = experimentalStyled('div')(({ theme }) => ({
   },
 }));
 
-const FullLayout = ({ children }) => {
-  const [isSidebarOpen] = React.useState(true);
-  const [isMobileSidebarOpen, setMobileSidebarOpen] = React.useState(false);
+interface Props {
+  children: React.ReactNode;
+}
+
+const FullLayout: React.FC<Props> = ({ children }) => {
+  const [isSidebarOpen] = useState(true);
+  const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+
   return (
     <MainWrapper>
       <Header

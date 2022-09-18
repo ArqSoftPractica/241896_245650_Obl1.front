@@ -1,7 +1,6 @@
 import React from 'react';
 import FeatherIcon from 'feather-icons-react';
 import { AppBar, Box, IconButton, Toolbar } from '@mui/material';
-// Dropdown Component
 import ProfileDD from './ProfileDD';
 
 const Header = ({ sx, customClass, toggleMobileSidebar, position }) => {
