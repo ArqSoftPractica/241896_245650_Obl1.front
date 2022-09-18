@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 
-const Footer = () => {
+const Footer: React.FC<Record<string, never>> = () => {
   return (
     <Box sx={{ p: 3, textAlign: 'center' }}>
       <Typography>
