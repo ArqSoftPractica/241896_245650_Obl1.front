@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Box, Table, TableBody, TableCell, TableHead, TableRow, Chip } from '@mui/material';
+import { Typography, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import BaseCard from '../baseCard/BaseCard';
 
 const expenses = [
