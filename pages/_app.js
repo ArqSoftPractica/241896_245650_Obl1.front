@@ -5,7 +5,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from '../src/theme/theme';
 import FullLayout from '../src/layouts/FullLayout';
 import '../styles/style.css';
-// Client-side cache, shared for the whole session of the user in the browser.
 
 const MyApp = (props) => {
   const { Component, pageProps } = props;
