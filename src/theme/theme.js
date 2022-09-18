@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 import components from './ComponentOverRide';
 import shadows from './Shadows';
-import typography from './Typoraphy';
+import typography from './Typography';
 
 // Create a theme instance.
 const theme = createTheme({
