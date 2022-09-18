@@ -1,11 +1,11 @@
 import { Grid } from '@mui/material';
-import ProductPerfomance from '../src/components/dashboard/ProductPerfomance';
+import ExpensesTable from '../src/components/dashboard/ExpensesTable';
 
 const Tables = () => {
   return (
     <Grid container spacing={0}>
       <Grid item xs={12} lg={12}>
-        <ProductPerfomance />
+        <ExpensesTable />
       </Grid>
     </Grid>
   );

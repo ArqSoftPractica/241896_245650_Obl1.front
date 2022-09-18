@@ -1,8 +1,8 @@
 const Menuitems = [
   {
-    title: 'Forms',
+    title: 'Categories',
     icon: 'layout',
-    href: '/forms',
+    href: '/categories',
   },
   {
     title: 'Pagination',
@@ -10,7 +10,7 @@ const Menuitems = [
     href: '/pagination',
   },
   {
-    title: 'Tables',
+    title: 'Expenses',
     icon: 'grid',
     href: '/',
   },
