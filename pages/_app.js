@@ -16,7 +16,7 @@ const MyApp = (props) => {
   return (
     <CacheProvider value={emotionCache}>
       <Head>
-        <title>Flexy NextJs Starter kit page</title>
+        <title>Flexy</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <ThemeProvider theme={theme}>
