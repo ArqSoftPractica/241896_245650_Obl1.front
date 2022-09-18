@@ -1,10 +1,11 @@
-import React from 'react';
-
 import { Card, CardContent, Box, Typography } from '@mui/material';
 
-const BaseCard = (props) => {
-  const { title, children, ...rest } = props;
+export interface Props {
+  title: string;
+  children: React.ReactNode;
+}
 
+const BaseCard: React.FC<Props> = ({ title, children }) => {
   return (
     <Card>
       <Box p={2} display="flex" alignItems="center">
