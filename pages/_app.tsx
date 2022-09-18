@@ -11,9 +11,7 @@ interface Props {
   pageProps: any;
 }
 
-const MyApp: React.FC<Props> = (props) => {
-  const { Component, pageProps } = props;
-
+const MyApp: React.FC<Props> = ({ Component, pageProps }) => {
   return (
     <>
       <Head>
