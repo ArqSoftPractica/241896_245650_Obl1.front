@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import ExpensesTable from '../src/components/dashboard/ExpensesTable';
+import ExpensesTable from '../src/components/expenses/ExpensesTable';
 
 const Tables = () => {
   return (
