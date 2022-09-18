@@ -6,7 +6,12 @@ import theme from '../src/theme/theme';
 import FullLayout from '../src/layouts/FullLayout';
 import '../styles/style.css';
 
-const MyApp = (props) => {
+interface Props {
+  Component: React.ComponentType;
+  pageProps: any;
+}
+
+const MyApp: React.FC<Props> = (props) => {
   const { Component, pageProps } = props;
 
   return (
