@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import BaseCard from '../src/components/baseCard/BaseCard';
 
-const Forms = () => {
+const Forms: React.FC<Record<string, never>> = () => {
   return (
     <Grid container spacing={0}>
       <Grid item xs={12} lg={12}>
