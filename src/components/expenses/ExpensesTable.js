@@ -1,5 +1,16 @@
 import React from 'react';
-import { Typography, Table, TableBody, TableCell, TableHead, TableRow, Pagination, Box } from '@mui/material';
+import {
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Pagination,
+  Box,
+  IconButton,
+} from '@mui/material';
+import FeatherIcon from 'feather-icons-react';
 import BaseCard from '../baseCard/BaseCard';
 
 const expenses = [
@@ -17,38 +28,26 @@ const expenses = [
   },
 ];
 
+const expensesTableColumns = ['Date', 'Category', 'Description', 'Amount', ''];
+
 const ExpensesTable = () => {
   return (
     <BaseCard title="Expenses">
       <Table
         aria-label="simple table"
         sx={{
-          mt: 3,
           whiteSpace: 'nowrap',
         }}
       >
         <TableHead>
           <TableRow>
-            <TableCell>
-              <Typography color="textSecondary" variant="h6">
-                Date
-              </Typography>
-            </TableCell>
-            <TableCell>
-              <Typography color="textSecondary" variant="h6">
-                Category
-              </Typography>
-            </TableCell>
-            <TableCell>
-              <Typography color="textSecondary" variant="h6">
-                Description
-              </Typography>
-            </TableCell>
-            <TableCell>
-              <Typography color="textSecondary" variant="h6">
-                Amount
-              </Typography>
-            </TableCell>
+            {expensesTableColumns.map((column) => (
+              <TableCell key={column}>
+                <Typography color="textPrimary" variant="h6">
+                  {column}
+                </Typography>
+              </TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -73,6 +72,14 @@ const ExpensesTable = () => {
                 <Typography color="textSecondary" variant="h6">
                   {product.amount}
                 </Typography>
+              </TableCell>
+              <TableCell>
+                <IconButton aria-label="delete" color="primary">
+                  <FeatherIcon icon="edit" width="20" height="20" />
+                </IconButton>
+                <IconButton aria-label="delete" color="error">
+                  <FeatherIcon icon="trash" width="20" height="20" />
+                </IconButton>
               </TableCell>
             </TableRow>
           ))}

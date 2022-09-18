@@ -1,12 +1,12 @@
 const Menuitems = [
   {
     title: 'Expenses',
-    icon: 'grid',
+    icon: 'dollar-sign',
     href: '/',
   },
   {
     title: 'Categories',
-    icon: 'layout',
+    icon: 'grid',
     href: '/categories',
   },
 ];
