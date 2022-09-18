@@ -11,16 +11,18 @@ import {
   IconButton,
 } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
-import BaseCard from '../baseCard/BaseCard';
+import BaseCard from '../baseCard/BaseCard.tsx';
 
 const expenses = [
   {
+    id: 1,
     date: '12/12/2021',
     category: 'Entertainment',
     description: 'Movie',
     amount: 213123,
   },
   {
+    id: 2,
     date: '12/12/2021',
     category: 'Entertainment',
     description: 'Movie',
@@ -30,7 +32,7 @@ const expenses = [
 
 const expensesTableColumns = ['Date', 'Category', 'Description', 'Amount', ''];
 
-const ExpensesTable = () => {
+const ExpensesTable: React.FC<Record<string, never>> = () => {
   return (
     <BaseCard title="Expenses">
       <Table
@@ -51,26 +53,26 @@ const ExpensesTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {expenses.map((product) => (
-            <TableRow key={product.name}>
+          {expenses.map((expense) => (
+            <TableRow key={expense.id}>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  {product.date}
+                  {expense.date}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  {product.category}
+                  {expense.category}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  {product.description}
+                  {expense.description}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  {product.amount}
+                  {expense.amount}
                 </Typography>
               </TableCell>
               <TableCell>
