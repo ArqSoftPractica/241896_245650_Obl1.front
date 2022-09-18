@@ -3,9 +3,14 @@ import FeatherIcon from 'feather-icons-react';
 import { AppBar, Box, IconButton, Toolbar } from '@mui/material';
 import ProfileDD from './ProfileDD';
 
-const Header = ({ sx, customClass, toggleMobileSidebar, position }) => {
+interface Props {
+  sx: any;
+  toggleMobileSidebar: () => void;
+}
+
+const Header: React.FC<Props> = ({ sx, toggleMobileSidebar }) => {
   return (
-    <AppBar sx={sx} position={position} elevation={0} className={customClass}>
+    <AppBar sx={sx} elevation={0}>
       <Toolbar>
         <IconButton
           size="large"
