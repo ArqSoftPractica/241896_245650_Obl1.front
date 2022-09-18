@@ -5,7 +5,6 @@ import FeatherIcon from 'feather-icons-react';
 import { useRouter } from 'next/router';
 import LogoIcon from '../logo/LogoIcon';
 import Menuitems from './MenuItems';
-import Buynow from './Buynow';
 
 const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
   const [open, setOpen] = React.useState(true);
