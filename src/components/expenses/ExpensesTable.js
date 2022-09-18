@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Typography, Table, TableBody, TableCell, TableHead, TableRow, Pagination, Box } from '@mui/material';
 import BaseCard from '../baseCard/BaseCard';
 
 const expenses = [
@@ -78,6 +78,9 @@ const ExpensesTable = () => {
           ))}
         </TableBody>
       </Table>
+      <Box sx={{ paddingTop: '30px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
+        <Pagination count={8} shape="rounded" variant="outlined" color="secondary" />
+      </Box>
     </BaseCard>
   );
 };
