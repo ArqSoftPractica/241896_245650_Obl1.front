@@ -11,7 +11,7 @@ import {
   IconButton,
 } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
-import BaseCard from '../baseCard/BaseCard.tsx';
+import BaseCard from '../baseCard/BaseCard';
 
 const expenses = [
   {
