@@ -1,4 +1,10 @@
-const Menuitems = [
+export interface MenuItems {
+  title: string;
+  icon: string;
+  href: string;
+}
+
+const Menuitems: MenuItems[] = [
   {
     title: 'Expenses',
     icon: 'dollar-sign',
