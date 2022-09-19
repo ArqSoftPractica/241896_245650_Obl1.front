@@ -37,10 +37,6 @@ const expensesTableColumns = ['Date', 'Category', 'Description', 'Amount', ''];
 const ExpensesTable: React.FC<Record<string, never>> = () => {
   const [isDeleteExpenseDialogOpen, setIsDeleteExpenseDialogOpen] = useState<boolean>(false);
 
-  const handleDeleteExpenseDialogOpen = (): void => {
-    setIsDeleteExpenseDialogOpen(true);
-  };
-
   const onDeleteExpenseHandler = (): void => {
     console.log('deleted');
     setIsDeleteExpenseDialogOpen(false);
@@ -94,7 +90,7 @@ const ExpensesTable: React.FC<Record<string, never>> = () => {
                 <IconButton aria-label="delete" color="primary">
                   <FeatherIcon icon="edit" width="20" height="20" />
                 </IconButton>
-                <IconButton aria-label="delete" color="error" onClick={handleDeleteExpenseDialogOpen}>
+                <IconButton aria-label="delete" color="error" onClick={() => setIsDeleteExpenseDialogOpen(true)}>
                   <FeatherIcon icon="trash" width="20" height="20" />
                 </IconButton>
               </TableCell>
