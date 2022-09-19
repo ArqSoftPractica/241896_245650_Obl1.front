@@ -26,7 +26,7 @@ const AddCategoryDialog: React.FC<DialogProps> = ({ onClose, open, onAddHandler 
           <TextField id="name-basic" label="Name*" variant="outlined" fullWidth />
           <TextField
             id="limit-basic"
-            label="Monthly Spending Limit (optional)"
+            label="Monthly Spending Limit"
             variant="outlined"
             type="number"
             InputProps={{ inputProps: { min: 0 } }}
