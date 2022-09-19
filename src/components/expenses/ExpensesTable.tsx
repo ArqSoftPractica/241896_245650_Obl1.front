@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Typography,
   Table,
@@ -13,6 +13,7 @@ import {
 import FeatherIcon from 'feather-icons-react';
 import BaseCard from '../baseCard/BaseCard';
 import ExpensesTableTitle from './ExpensesTableTitle';
+import DeleteExpenseDialog from './dialogs/DeleteExpenseDialog';
 
 const expenses = [
   {
@@ -34,6 +35,17 @@ const expenses = [
 const expensesTableColumns = ['Date', 'Category', 'Description', 'Amount', ''];
 
 const ExpensesTable: React.FC<Record<string, never>> = () => {
+  const [isDeleteExpenseDialogOpen, setIsDeleteExpenseDialogOpen] = useState<boolean>(false);
+
+  const handleDeleteExpenseDialogOpen = (): void => {
+    setIsDeleteExpenseDialogOpen(true);
+  };
+
+  const onDeleteExpenseHandler = (): void => {
+    console.log('deleted');
+    setIsDeleteExpenseDialogOpen(false);
+  };
+
   return (
     <BaseCard>
       <ExpensesTableTitle />
@@ -82,7 +94,7 @@ const ExpensesTable: React.FC<Record<string, never>> = () => {
                 <IconButton aria-label="delete" color="primary">
                   <FeatherIcon icon="edit" width="20" height="20" />
                 </IconButton>
-                <IconButton aria-label="delete" color="error">
+                <IconButton aria-label="delete" color="error" onClick={handleDeleteExpenseDialogOpen}>
                   <FeatherIcon icon="trash" width="20" height="20" />
                 </IconButton>
               </TableCell>
@@ -93,6 +105,11 @@ const ExpensesTable: React.FC<Record<string, never>> = () => {
       <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
         <Pagination count={8} color="secondary" />
       </Box>
+      <DeleteExpenseDialog
+        open={isDeleteExpenseDialogOpen}
+        onClose={() => setIsDeleteExpenseDialogOpen(false)}
+        onDeleteHandler={onDeleteExpenseHandler}
+      />
     </BaseCard>
   );
 };
