@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import BaseDialog from 'src/components/dialogs/BaseDialog';
+import BaseDialog from 'src/components/baseDialog/BaseDialog';
 
 export interface DialogProps {
   open: boolean;
