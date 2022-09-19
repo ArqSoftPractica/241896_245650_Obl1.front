@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 import BaseCard from '../baseCard/BaseCard';
+import ExpensesTableTitle from './ExpensesTableTitle';
 
 const expenses = [
   {
@@ -34,11 +35,13 @@ const expensesTableColumns = ['Date', 'Category', 'Description', 'Amount', ''];
 
 const ExpensesTable: React.FC<Record<string, never>> = () => {
   return (
-    <BaseCard title="Expenses">
+    <BaseCard>
+      <ExpensesTableTitle />
       <Table
         aria-label="simple table"
         sx={{
           whiteSpace: 'nowrap',
+          marginTop: '20px',
         }}
       >
         <TableHead>
@@ -53,29 +56,29 @@ const ExpensesTable: React.FC<Record<string, never>> = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {expenses.map((expense) => (
-            <TableRow key={expense.id}>
+          {expenses.map(({ id, date, category, description, amount }) => (
+            <TableRow key={id}>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  {expense.date}
+                  {date}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  {expense.category}
+                  {category}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  {expense.description}
+                  {description}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography color="textSecondary" variant="h6">
-                  {expense.amount}
+                  {amount}
                 </Typography>
               </TableCell>
-              <TableCell>
+              <TableCell style={{ width: '40px' }}>
                 <IconButton aria-label="delete" color="primary">
                   <FeatherIcon icon="edit" width="20" height="20" />
                 </IconButton>
@@ -87,8 +90,8 @@ const ExpensesTable: React.FC<Record<string, never>> = () => {
           ))}
         </TableBody>
       </Table>
-      <Box sx={{ paddingTop: '30px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
-        <Pagination count={8} shape="rounded" variant="outlined" color="secondary" />
+      <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
+        <Pagination count={8} color="secondary" />
       </Box>
     </BaseCard>
   );
