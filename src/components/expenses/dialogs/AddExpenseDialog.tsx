@@ -40,7 +40,7 @@ const AddExpenseDialog: React.FC<DialogProps> = ({ onClose, open, onAddHandler }
       buttonsSize="large"
     >
       <Stack spacing={3}>
-        <Box display="flex" columnGap={2} marginTop={3}>
+        <Box display="flex" columnGap={2} marginTop={1}>
           <TextField
             id="amount-basic"
             label="Amount"

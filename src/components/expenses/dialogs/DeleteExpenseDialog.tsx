@@ -10,7 +10,9 @@ export interface DialogProps {
 const DeleteExpenseDialog: React.FC<DialogProps> = ({ onClose, open, onDeleteHandler }) => {
   return (
     <BaseDialog onClose={onClose} title="Delete Expense" open={open} acceptButtonHandler={onDeleteHandler}>
-      <Typography marginY={2}>Are you sure you want to delete this expense?</Typography>
+      <Typography marginY={2} textAlign="center">
+        Are you sure you want to delete this expense?
+      </Typography>
     </BaseDialog>
   );
 };
