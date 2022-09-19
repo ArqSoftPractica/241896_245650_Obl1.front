@@ -14,6 +14,7 @@ import FeatherIcon from 'feather-icons-react';
 import BaseCard from '../baseCard/BaseCard';
 import ExpensesTableTitle from './ExpensesTableTitle';
 import DeleteExpenseDialog from './dialogs/DeleteExpenseDialog';
+import AddExpenseDialog from './dialogs/AddExpenseDialog';
 
 const expenses = [
   {
@@ -36,15 +37,21 @@ const expensesTableColumns = ['Date', 'Category', 'Description', 'Amount', ''];
 
 const ExpensesTable: React.FC<Record<string, never>> = () => {
   const [isDeleteExpenseDialogOpen, setIsDeleteExpenseDialogOpen] = useState<boolean>(false);
+  const [isAddExpenseDialogOpen, setIsAddExpenseDialogOpen] = useState<boolean>(false);
 
   const onDeleteExpenseHandler = (): void => {
     console.log('deleted');
     setIsDeleteExpenseDialogOpen(false);
   };
 
+  const onAddExpenseHandler = (): void => {
+    console.log('added');
+    setIsAddExpenseDialogOpen(false);
+  };
+
   return (
     <BaseCard>
-      <ExpensesTableTitle />
+      <ExpensesTableTitle setIsAddExpenseDialogOpen={setIsAddExpenseDialogOpen} />
       <Table
         aria-label="simple table"
         sx={{
@@ -101,6 +108,11 @@ const ExpensesTable: React.FC<Record<string, never>> = () => {
       <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
         <Pagination count={8} color="secondary" />
       </Box>
+      <AddExpenseDialog
+        open={isAddExpenseDialogOpen}
+        onClose={() => setIsAddExpenseDialogOpen(false)}
+        onAddHandler={onAddExpenseHandler}
+      />
       <DeleteExpenseDialog
         open={isDeleteExpenseDialogOpen}
         onClose={() => setIsDeleteExpenseDialogOpen(false)}

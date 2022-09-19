@@ -10,6 +10,8 @@ export interface DialogProps {
   cancelButtonText?: string;
   cancelButton?: boolean;
   acceptButtonHandler: () => void;
+  buttonsSize?: 'small' | 'medium' | 'large';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
 }
 
 const BaseDialog: React.FC<DialogProps> = ({
@@ -21,9 +23,11 @@ const BaseDialog: React.FC<DialogProps> = ({
   cancelButton = true,
   acceptButtonText = 'Yes',
   cancelButtonText = 'No',
+  buttonsSize = 'small',
+  size = 'xs',
 }) => {
   return (
-    <Dialog onClose={onClose} open={open}>
+    <Dialog onClose={onClose} open={open} fullWidth maxWidth={size}>
       <Box padding={3.5}>
         <Typography variant="h3" fontWeight="bold" textAlign="center">
           {title}
@@ -33,13 +37,13 @@ const BaseDialog: React.FC<DialogProps> = ({
           <Button
             variant="contained"
             color={cancelButton ? 'success' : 'primary'}
-            size="small"
+            size={buttonsSize}
             onClick={acceptButtonHandler}
           >
             {acceptButtonText}
           </Button>
           {cancelButton && (
-            <Button variant="contained" color="error" size="small" onClick={onClose}>
+            <Button variant="contained" color="error" size={buttonsSize} onClick={onClose}>
               {cancelButtonText}
             </Button>
           )}
