@@ -48,7 +48,7 @@ const Forms: React.FC<Record<string, never>> = () => {
             </FormControl>
           </Stack>
           <br />
-          <Button variant="contained" mt={2}>
+          <Button variant="contained" color="primary">
             Submit
           </Button>
         </BaseCard>

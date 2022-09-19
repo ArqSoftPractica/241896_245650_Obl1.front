@@ -81,7 +81,7 @@ const ProfileDD: React.FC<Record<string, never>> = () => {
           </Box>
           <Divider />
           <Box p={2}>
-            <Link to="/">
+            <Link href="/">
               <Button fullWidth variant="contained" color="primary">
                 Logout
               </Button>

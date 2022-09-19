@@ -13,17 +13,8 @@ interface Props {
 }
 
 const Sidebar: React.FC<Props> = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
-  const [open, setOpen] = useState<boolean>(true);
+  const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'));
 
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
-
-  const handleClick = (index) => {
-    if (open === index) {
-      setOpen((prevopen) => !prevopen);
-    } else {
-      setOpen(index);
-    }
-  };
   const curl = useRouter();
   const location = curl.pathname;
 
@@ -36,7 +27,6 @@ const Sidebar: React.FC<Props> = ({ isMobileSidebarOpen, onSidebarClose, isSideb
             <List component="li" disablePadding key={item.title}>
               <NextLink href={item.href}>
                 <ListItem
-                  onClick={() => handleClick(index)}
                   button
                   selected={location === item.href}
                   sx={{
@@ -67,36 +57,19 @@ const Sidebar: React.FC<Props> = ({ isMobileSidebarOpen, onSidebarClose, isSideb
       </Box>
     </Box>
   );
-  if (lgUp) {
-    return (
-      <Drawer
-        anchor="left"
-        open={isSidebarOpen}
-        variant="persistent"
-        PaperProps={{
-          sx: {
-            width: '265px',
-            border: '0 !important',
-            boxShadow: '0px 7px 30px 0px rgb(113 122 131 / 11%)',
-          },
-        }}
-      >
-        {SidebarContent}
-      </Drawer>
-    );
-  }
   return (
     <Drawer
       anchor="left"
-      open={isMobileSidebarOpen}
-      onClose={onSidebarClose}
+      open={lgUp ? isSidebarOpen : isMobileSidebarOpen}
+      variant={lgUp ? 'persistent' : 'temporary'}
+      onClose={!lgUp ? undefined : onSidebarClose}
       PaperProps={{
         sx: {
           width: '265px',
           border: '0 !important',
+          boxShadow: `${lgUp ? '0px 7px 30px 0px rgb(113 122 131 / 11%)' : ''}`,
         },
       }}
-      variant="temporary"
     >
       {SidebarContent}
     </Drawer>
