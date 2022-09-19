@@ -32,7 +32,7 @@ interface Props {
 const FullLayout: React.FC<Props> = ({ children }) => {
   const [isSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+  const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'));
 
   return (
     <MainWrapper>
