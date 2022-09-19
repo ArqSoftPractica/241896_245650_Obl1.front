@@ -23,17 +23,17 @@ const AddCategoryDialog: React.FC<DialogProps> = ({ onClose, open, onAddHandler 
     >
       <Stack spacing={3}>
         <Box display="flex" justifyContent="space-between" columnGap={2} marginTop={1}>
-          <TextField id="name-basic" label="Name" variant="outlined" fullWidth />
+          <TextField id="name-basic" label="Name*" variant="outlined" fullWidth />
           <TextField
             id="limit-basic"
-            label="Monthly Spending Limit"
+            label="Monthly Spending Limit (optional)"
             variant="outlined"
             type="number"
             InputProps={{ inputProps: { min: 0 } }}
             fullWidth
           />
         </Box>
-        <TextField id="description-multiline-static" label="Description" multiline rows={4} />
+        <TextField id="description-multiline-static" label="Description*" multiline rows={4} />
       </Stack>
     </BaseDialog>
   );

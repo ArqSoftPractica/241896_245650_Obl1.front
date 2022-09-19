@@ -43,14 +43,14 @@ const AddExpenseDialog: React.FC<DialogProps> = ({ onClose, open, onAddHandler }
         <Box display="flex" columnGap={2} marginTop={1}>
           <TextField
             id="amount-basic"
-            label="Amount"
+            label="Amount*"
             variant="outlined"
             type="number"
             InputProps={{ inputProps: { min: 0 } }}
           />
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
-              label="Date"
+              label="Date*"
               value="2022-05-24"
               // onChange={() => {
               //   return;
@@ -59,14 +59,14 @@ const AddExpenseDialog: React.FC<DialogProps> = ({ onClose, open, onAddHandler }
             />
           </LocalizationProvider>
         </Box>
-        <TextField id="category-basic" select label="Category" variant="outlined">
+        <TextField id="category-basic" select label="Category*" variant="outlined">
           {categories.map(({ value, name }) => (
             <MenuItem key={value} value={value}>
               {name}
             </MenuItem>
           ))}
         </TextField>
-        <TextField id="description-multiline-static" label="Description" multiline rows={4} />
+        <TextField id="description-multiline-static" label="Description*" multiline rows={4} />
       </Stack>
     </BaseDialog>
   );
