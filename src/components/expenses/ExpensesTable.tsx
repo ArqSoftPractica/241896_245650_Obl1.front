@@ -11,7 +11,7 @@ import {
   IconButton,
 } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
-import Expense from 'src/interfaces/Expense';
+import { Expense } from 'src/interfaces/Expense';
 import BaseCard from '../baseCard/BaseCard';
 import ExpensesTableTitle from './ExpensesTableTitle';
 import DeleteExpenseDialog from './dialogs/DeleteExpenseDialog';
