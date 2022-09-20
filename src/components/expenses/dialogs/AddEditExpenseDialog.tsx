@@ -58,7 +58,7 @@ const AddEditExpenseDialog: React.FC<DialogProps> = ({ onClose, open, onAddHandl
       open={open}
       acceptButtonHandler={onAddHandler}
       cancelButton={false}
-      acceptButtonText={editMode ? 'Edit' : 'Add'}
+      acceptButtonText={editMode ? 'Confirm' : 'Add'}
       buttonsSize="large"
     >
       <Stack spacing={3}>
