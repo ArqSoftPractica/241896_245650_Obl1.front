@@ -1,8 +1,10 @@
 import { Grid } from '@mui/material';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import CategoriesTable from 'src/components/categories/CategoriesTable';
+import FullLayout from 'src/layouts/FullLayout';
+import { NextPageWithLayout } from './_app';
 
-const Tables: React.FC<Record<string, never>> = () => {
+const CategoriesPage: NextPageWithLayout = () => {
   return (
     <Grid container spacing={0}>
       <Grid item xs={12} lg={12}>
@@ -12,4 +14,8 @@ const Tables: React.FC<Record<string, never>> = () => {
   );
 };
 
-export default Tables;
+CategoriesPage.getLayout = (page: ReactElement) => {
+  return <FullLayout>{page}</FullLayout>;
+};
+
+export default CategoriesPage;
