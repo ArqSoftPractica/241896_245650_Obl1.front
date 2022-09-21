@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Typography, Box, Button, TextField } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import FeatherIcon from 'feather-icons-react';
 
-const ExpensesTableTitle: React.FC<Record<string, never>> = () => {
+export interface Props {
+  setIsAddExpenseDialogOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const ExpensesTableTitle: React.FC<Props> = ({ setIsAddExpenseDialogOpen }) => {
   return (
     <Box p={2} display="flex" alignItems="center" justifyContent="space-between" marginY={1}>
       <Box display="flex">
@@ -33,7 +37,7 @@ const ExpensesTableTitle: React.FC<Record<string, never>> = () => {
           </LocalizationProvider>
         </Box>
       </Box>
-      <Button variant="outlined" color="success">
+      <Button variant="outlined" color="success" onClick={() => setIsAddExpenseDialogOpen(true)}>
         <FeatherIcon icon="plus" width="20" height="20" style={{ marginRight: '10px' }} />
         Add Expense
       </Button>

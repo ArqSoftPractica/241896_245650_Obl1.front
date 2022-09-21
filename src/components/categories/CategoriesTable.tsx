@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import {
   Typography,
   Table,
@@ -13,6 +13,8 @@ import {
 import FeatherIcon from 'feather-icons-react';
 import BaseCard from '../baseCard/BaseCard';
 import CategoriesTableTitle from './CategoriesTableTitle';
+import DeleteCategoryDialog from './dialogs/DeleteCategoryDialog';
+import AddCategoryDialog from './dialogs/AddCategoryDialog';
 
 const expenses = [
   {
@@ -34,9 +36,22 @@ const expenses = [
 const categoriesTableColumns = ['Name', 'Description', 'Image', 'Monthly Spending Limit', ''];
 
 const CategoriesTable: React.FC<Record<string, never>> = () => {
+  const [isDeleteCategoryDialogOpen, setIsDeleteCategoryDialogOpen] = useState<boolean>(false);
+  const [isAddCategoryDialogOpen, setIsAddCategoryDialogOpen] = useState<boolean>(false);
+
+  const onAddCategoryHandler = (): void => {
+    console.log('added');
+    setIsAddCategoryDialogOpen(false);
+  };
+
+  const onDeleteExpenseHandler = (): void => {
+    console.log('deleted');
+    setIsDeleteCategoryDialogOpen(false);
+  };
+
   return (
     <BaseCard>
-      <CategoriesTableTitle />
+      <CategoriesTableTitle setIsAddCategoryDialogOpen={setIsAddCategoryDialogOpen} />
       <Table
         aria-label="simple table"
         sx={{
@@ -82,7 +97,7 @@ const CategoriesTable: React.FC<Record<string, never>> = () => {
                 <IconButton aria-label="delete" color="primary">
                   <FeatherIcon icon="edit" width="20" height="20" />
                 </IconButton>
-                <IconButton aria-label="delete" color="error">
+                <IconButton aria-label="delete" color="error" onClick={() => setIsDeleteCategoryDialogOpen(true)}>
                   <FeatherIcon icon="trash" width="20" height="20" />
                 </IconButton>
               </TableCell>
@@ -93,6 +108,16 @@ const CategoriesTable: React.FC<Record<string, never>> = () => {
       <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
         <Pagination count={8} color="secondary" />
       </Box>
+      <AddCategoryDialog
+        open={isAddCategoryDialogOpen}
+        onClose={() => setIsAddCategoryDialogOpen(false)}
+        onAddHandler={onAddCategoryHandler}
+      />
+      <DeleteCategoryDialog
+        open={isDeleteCategoryDialogOpen}
+        onClose={() => setIsDeleteCategoryDialogOpen(false)}
+        onDeleteHandler={onDeleteExpenseHandler}
+      />
     </BaseCard>
   );
 };
