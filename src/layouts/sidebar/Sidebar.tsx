@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import NextLink from 'next/link';
 import { Box, Drawer, useMediaQuery, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
@@ -23,7 +23,7 @@ const Sidebar: React.FC<Props> = ({ isMobileSidebarOpen, onSidebarClose, isSideb
       <LogoIcon />
       <Box mt={2}>
         <List>
-          {Menuitems.map((item, index) => (
+          {Menuitems.map((item) => (
             <List component="li" disablePadding key={item.title}>
               <NextLink href={item.href}>
                 <ListItem

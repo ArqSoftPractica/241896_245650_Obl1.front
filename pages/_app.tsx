@@ -1,17 +1,23 @@
 import * as React from 'react';
 import Head from 'next/head';
+import { NextPage } from 'next';
+import { AppProps } from 'next/dist/shared/lib/router/router';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import theme from '../src/theme/theme';
-import FullLayout from '../src/layouts/FullLayout';
 import '../styles/style.css';
+import theme from '../src/theme/theme';
 
-interface Props {
-  Component: React.ComponentType;
-  pageProps: any;
-}
+export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: React.ReactElement) => React.ReactNode;
+};
 
-const MyApp: React.FC<Props> = ({ Component, pageProps }) => {
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
+  const getLayout = Component.getLayout ?? ((page) => page);
+
   return (
     <>
       <Head>
@@ -20,9 +26,7 @@ const MyApp: React.FC<Props> = ({ Component, pageProps }) => {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <FullLayout>
-          <Component {...pageProps} />
-        </FullLayout>
+        {getLayout(<Component {...pageProps} />)}
       </ThemeProvider>
     </>
   );
