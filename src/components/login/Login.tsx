@@ -8,8 +8,8 @@ const Login: React.FC<Record<string, never>> = () => {
     <BaseCard>
       <Stack spacing={4.5} borderColor="primary" display="flex" alignItems="center" paddingX={3} paddingY={1.5}>
         <LogoIcon width={220} height={80} />
-        <TextField id="amount-basic" label="Email" variant="outlined" fullWidth />
-        <TextField id="amount-basic" label="Password" type="password" variant="outlined" fullWidth />
+        <TextField id="email" label="Email" variant="outlined" fullWidth />
+        <TextField id="password" label="Password" type="password" variant="outlined" fullWidth />
         <Button fullWidth={false} style={{ width: '100px' }} size="large" variant="outlined" color="secondary">
           Log In
         </Button>
