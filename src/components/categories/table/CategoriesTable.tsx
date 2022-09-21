@@ -11,7 +11,7 @@ import {
   IconButton,
 } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
-import BaseCard from '../baseCard/BaseCard';
+import BaseCard from '../../baseCard/BaseCard';
 import CategoriesTableTitle from './CategoriesTableTitle';
 import DeleteCategoryDialog from './dialogs/DeleteCategoryDialog';
 import AddCategoryDialog from './dialogs/AddCategoryDialog';
