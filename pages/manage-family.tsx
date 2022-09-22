@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
 import React, { ReactElement } from 'react';
-import InviteFamilyMember from 'src/components/invite/InviteMember';
+import AccessKey from 'src/components/family/AccessKey';
+import InviteFamilyMember from 'src/components/family/InviteMember';
 import FullLayout from 'src/layouts/FullLayout';
 import { NextPageWithLayout } from './_app';
 
@@ -9,6 +10,7 @@ const InvitePage: NextPageWithLayout = () => {
     <Grid container spacing={0}>
       <Grid item xs={12} lg={12}>
         <InviteFamilyMember />
+        <AccessKey />
       </Grid>
     </Grid>
   );

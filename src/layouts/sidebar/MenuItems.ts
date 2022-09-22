@@ -18,7 +18,7 @@ const Menuitems: MenuItems[] = [
   {
     title: 'Manage Your Family',
     icon: 'users',
-    href: '/invite',
+    href: '/manage-family',
   },
 ];
 
