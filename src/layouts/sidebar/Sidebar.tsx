@@ -5,6 +5,7 @@ import FeatherIcon from 'feather-icons-react';
 import { useRouter } from 'next/router';
 import LogoIcon from '../logo/LogoIcon';
 import Menuitems from './MenuItems';
+import GrowthBanner from './GrowthBanner';
 
 interface Props {
   isMobileSidebarOpen: boolean;
@@ -55,6 +56,7 @@ const Sidebar: React.FC<Props> = ({ isMobileSidebarOpen, onSidebarClose, isSideb
           ))}
         </List>
       </Box>
+      <GrowthBanner />
     </Box>
   );
   return (
