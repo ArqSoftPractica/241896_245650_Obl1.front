@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import Growth from '../../../assets/images/users/Growth.svg';
 
 const GrowthBanner = () => (
-  <Box pb={5} mt={5} marginTop={40}>
+  <Box pb={5} mt={5} marginTop={38.8}>
     <Box
       sx={{
         borderRadius: '10px',
