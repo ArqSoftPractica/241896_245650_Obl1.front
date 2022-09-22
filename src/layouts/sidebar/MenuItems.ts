@@ -15,6 +15,11 @@ const Menuitems: MenuItems[] = [
     icon: 'grid',
     href: '/categories',
   },
+  {
+    title: 'Manage Your Family',
+    icon: 'users',
+    href: '/invite',
+  },
 ];
 
 export default Menuitems;
