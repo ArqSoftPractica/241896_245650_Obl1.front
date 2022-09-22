@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import React, { ReactElement } from 'react';
-import CategoriesTable from 'src/components/categories/CategoriesTable';
+import CategoriesTable from 'src/components/categories/table/CategoriesTable';
 import FullLayout from 'src/layouts/FullLayout';
 import { NextPageWithLayout } from './_app';
 
