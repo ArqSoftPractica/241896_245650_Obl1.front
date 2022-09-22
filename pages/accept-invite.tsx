@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import React, { ReactElement } from 'react';
-import AcceptInvite from 'src/components/invite/AcceptInvite';
+import AcceptInvite from 'src/components/family/AcceptInvite';
 import AuthLayout from 'src/layouts/AuthLayout';
 import { NextPageWithLayout } from './_app';
 

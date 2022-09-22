@@ -15,7 +15,7 @@ const InviteFamilyMember: React.FC<Record<string, never>> = () => {
         Add Family Member
       </Typography>
       <Box display="flex" justifyContent="space-between" paddingRight={10}>
-        <Image src={Family} alt="Family" width={400} height={400} />
+        <Image src={Family} alt="Family" width={400} height={320} />
         <Stack
           spacing={4.5}
           borderColor="primary"

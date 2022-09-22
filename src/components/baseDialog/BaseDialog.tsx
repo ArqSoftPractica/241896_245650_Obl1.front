@@ -35,7 +35,7 @@ const BaseDialog: React.FC<DialogProps> = ({
         <Box marginY={2}>{children}</Box>
         <Box display="flex" justifyContent="center" columnGap={2} marginTop={3}>
           <Button
-            variant="contained"
+            variant="outlined"
             color={cancelButton ? 'success' : 'primary'}
             size={buttonsSize}
             onClick={acceptButtonHandler}
@@ -43,7 +43,7 @@ const BaseDialog: React.FC<DialogProps> = ({
             {acceptButtonText}
           </Button>
           {cancelButton && (
-            <Button variant="contained" color="error" size={buttonsSize} onClick={onClose}>
+            <Button variant="outlined" color="error" size={buttonsSize} onClick={onClose}>
               {cancelButtonText}
             </Button>
           )}
