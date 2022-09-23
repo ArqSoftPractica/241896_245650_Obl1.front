@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Image from 'next/image';
 import {
   Typography,
   Table,
@@ -11,25 +12,26 @@ import {
   IconButton,
 } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
+import { Category } from 'src/interfaces/Category';
 import BaseCard from '../../baseCard/BaseCard';
 import CategoriesTableTitle from './CategoriesTableTitle';
 import DeleteCategoryDialog from './dialogs/DeleteCategoryDialog';
-import AddCategoryDialog from './dialogs/AddCategoryDialog';
+import AddEditCategoryDialog from './dialogs/AddEditCategoryDialog';
 
-const expenses = [
+const categories: Category[] = [
   {
-    id: 1,
-    date: '12/12/2021',
-    category: 'Entertainment',
+    id: '1',
     description: 'Movie',
-    amount: 213123,
+    monthlySpendingLimit: 213123,
+    name: 'Entertainment',
+    image: null,
   },
   {
-    id: 2,
-    date: '12/12/2021',
-    category: 'Entertainment',
-    description: 'Movie',
-    amount: 213123,
+    id: '2',
+    description: 'Burgers & Fries',
+    monthlySpendingLimit: 2123,
+    name: 'Food',
+    image: null,
   },
 ];
 
@@ -38,15 +40,31 @@ const categoriesTableColumns = ['Name', 'Description', 'Image', 'Monthly Spendin
 const CategoriesTable: React.FC<Record<string, never>> = () => {
   const [isDeleteCategoryDialogOpen, setIsDeleteCategoryDialogOpen] = useState<boolean>(false);
   const [isAddCategoryDialogOpen, setIsAddCategoryDialogOpen] = useState<boolean>(false);
+  const [isEditCategoryDialogOpen, setIsEditCategoryDialogOpen] = useState<boolean>(false);
+  const [editedCategory, setEditedCategory] = useState<Category>();
 
   const onAddCategoryHandler = (): void => {
     console.log('added');
+    console.log('reloads categories');
     setIsAddCategoryDialogOpen(false);
   };
 
-  const onDeleteExpenseHandler = (): void => {
+  const onDeleteCategoryHandler = (): void => {
     console.log('deleted');
+    console.log('reloads categories');
     setIsDeleteCategoryDialogOpen(false);
+  };
+
+  const onEditCategoryHandler = (): void => {
+    console.log('edited');
+    console.log('reloads expenses');
+    setIsEditCategoryDialogOpen(false);
+  };
+
+  const onEditCategoryClickHandler = (category: Category): void => {
+    console.log('opens edit category dialog');
+    setEditedCategory(category);
+    setIsEditCategoryDialogOpen(true);
   };
 
   return (
@@ -71,52 +89,68 @@ const CategoriesTable: React.FC<Record<string, never>> = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {expenses.map(({ id, date, category, description, amount }) => (
-            <TableRow key={id}>
-              <TableCell>
-                <Typography color="textSecondary" variant="h6">
-                  {date}
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography color="textSecondary" variant="h6">
-                  {category}
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography color="textSecondary" variant="h6">
-                  {description}
-                </Typography>
-              </TableCell>
-              <TableCell style={{ width: '60px' }}>
-                <Typography color="textSecondary" variant="h6">
-                  {amount}
-                </Typography>
-              </TableCell>
-              <TableCell style={{ width: '20px' }}>
-                <IconButton aria-label="delete" color="primary">
-                  <FeatherIcon icon="edit" width="20" height="20" />
-                </IconButton>
-                <IconButton aria-label="delete" color="error" onClick={() => setIsDeleteCategoryDialogOpen(true)}>
-                  <FeatherIcon icon="trash" width="20" height="20" />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
+          {categories.length > 0 &&
+            categories.map(({ id, name, description, image, monthlySpendingLimit }) => (
+              <TableRow key={id}>
+                <TableCell>
+                  <Typography color="textSecondary" variant="h6">
+                    {name}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography color="textSecondary" variant="h6">
+                    {description}
+                  </Typography>
+                </TableCell>
+                <TableCell>{/* <Image src={image} alt="Family" width={50} height={50} /> */}</TableCell>
+                <TableCell style={{ width: '60px' }}>
+                  <Typography color="textSecondary" variant="h6">
+                    {monthlySpendingLimit}
+                  </Typography>
+                </TableCell>
+                <TableCell style={{ width: '20px' }}>
+                  <IconButton
+                    aria-label="delete"
+                    color="primary"
+                    onClick={() =>
+                      onEditCategoryClickHandler({
+                        id,
+                        name,
+                        description,
+                        image,
+                        monthlySpendingLimit,
+                      })
+                    }
+                  >
+                    <FeatherIcon icon="edit" width="20" height="20" />
+                  </IconButton>
+                  <IconButton aria-label="delete" color="error" onClick={() => setIsDeleteCategoryDialogOpen(true)}>
+                    <FeatherIcon icon="trash" width="20" height="20" />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
       <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
         <Pagination count={8} color="secondary" />
       </Box>
-      <AddCategoryDialog
+      <AddEditCategoryDialog
         open={isAddCategoryDialogOpen}
         onClose={() => setIsAddCategoryDialogOpen(false)}
         onAddHandler={onAddCategoryHandler}
       />
+      <AddEditCategoryDialog
+        open={isEditCategoryDialogOpen}
+        editMode
+        onClose={() => setIsEditCategoryDialogOpen(false)}
+        onAddHandler={onEditCategoryHandler}
+        currentValues={editedCategory}
+      />
       <DeleteCategoryDialog
         open={isDeleteCategoryDialogOpen}
         onClose={() => setIsDeleteCategoryDialogOpen(false)}
-        onDeleteHandler={onDeleteExpenseHandler}
+        onDeleteHandler={onDeleteCategoryHandler}
       />
     </BaseCard>
   );
