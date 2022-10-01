@@ -14,6 +14,11 @@ const ProfileDD: React.FC<Record<string, never>> = () => {
   const handleClose4 = () => {
     setAnchorEl4(null);
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+  };
+
   return (
     <>
       <Button
@@ -82,7 +87,7 @@ const ProfileDD: React.FC<Record<string, never>> = () => {
           <Divider />
           <Box p={2}>
             <Link href="/login">
-              <Button fullWidth variant="contained" color="primary">
+              <Button fullWidth variant="contained" color="primary" onClick={handleLogout}>
                 Logout
               </Button>
             </Link>
