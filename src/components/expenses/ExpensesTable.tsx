@@ -12,35 +12,32 @@ import {
 } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 import { Expense } from 'src/interfaces/Expense';
+import { getExpenses } from 'src/services/expenses.service';
+import { toast } from 'react-toastify';
+import formatDate from 'src/utils/formatDate';
 import BaseCard from '../baseCard/BaseCard';
 import ExpensesTableTitle from './ExpensesTableTitle';
 import DeleteExpenseDialog from './dialogs/DeleteExpenseDialog';
 import AddEditExpenseDialog from './dialogs/AddEditExpenseDialog';
 
-const expenses: Expense[] = [
-  {
-    id: '1',
-    date: '12/12/2021',
-    category: 'Entertainment',
-    description: 'Movie',
-    amount: 213123,
-  },
-  {
-    id: '2',
-    date: '12/12/2020',
-    category: 'Food',
-    description: 'Burgers & Fries',
-    amount: 2123,
-  },
-];
+export interface Props {
+  fromDate: Date;
+  toDate: Date;
+  handleFromDateChange: (date: Date | null) => void;
+  handleToDateChange: (date: Date | null) => void;
+}
+
+const EXPENSES_PER_PAGE = 4;
 
 const expensesTableColumns = ['Date', 'Category', 'Description', 'Amount', ''];
 
-const ExpensesTable: React.FC<Record<string, never>> = () => {
+const ExpensesTable: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, handleToDateChange }) => {
   const [isDeleteExpenseDialogOpen, setIsDeleteExpenseDialogOpen] = useState<boolean>(false);
   const [isAddExpenseDialogOpen, setIsAddExpenseDialogOpen] = useState<boolean>(false);
   const [isEditExpenseDialogOpen, setIsEditExpenseDialogOpen] = useState<boolean>(false);
   const [editedExpense, setEditedExpense] = useState<Expense>();
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [page, setPage] = useState<number>(1);
 
   const onDeleteExpenseHandler = (): void => {
     console.log('deleted');
@@ -66,9 +63,29 @@ const ExpensesTable: React.FC<Record<string, never>> = () => {
     setIsEditExpenseDialogOpen(true);
   };
 
+  useEffect(() => {
+    getExpenses({ fromDate, toDate, take: EXPENSES_PER_PAGE, skip: (page - 1) * EXPENSES_PER_PAGE })
+      .then(({ expenses: expensesObtained }) => {
+        setExpenses([...expensesObtained]);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  }, [fromDate, toDate, page]);
+
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
   return (
     <BaseCard>
-      <ExpensesTableTitle setIsAddExpenseDialogOpen={setIsAddExpenseDialogOpen} />
+      <ExpensesTableTitle
+        setIsAddExpenseDialogOpen={setIsAddExpenseDialogOpen}
+        fromDate={fromDate}
+        toDate={toDate}
+        handleFromDateChange={handleFromDateChange}
+        handleToDateChange={handleToDateChange}
+      />
       <Table
         aria-label="simple table"
         sx={{
@@ -88,54 +105,55 @@ const ExpensesTable: React.FC<Record<string, never>> = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {expenses.map(({ id, date, category, description, amount }) => (
-            <TableRow key={id}>
-              <TableCell>
-                <Typography color="textSecondary" variant="h6">
-                  {date}
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography color="textSecondary" variant="h6">
-                  {category}
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography color="textSecondary" variant="h6">
-                  {description}
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography color="textSecondary" variant="h6">
-                  {amount}
-                </Typography>
-              </TableCell>
-              <TableCell style={{ width: '40px' }}>
-                <IconButton
-                  aria-label="delete"
-                  color="primary"
-                  onClick={() =>
-                    onEditExpenseClickHandler({
-                      id,
-                      date,
-                      category,
-                      description,
-                      amount,
-                    })
-                  }
-                >
-                  <FeatherIcon icon="edit" width="20" height="20" />
-                </IconButton>
-                <IconButton aria-label="delete" color="error" onClick={() => setIsDeleteExpenseDialogOpen(true)}>
-                  <FeatherIcon icon="trash" width="20" height="20" />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
+          {expenses.length > 0 &&
+            expenses.map(({ id, date, category: { id: categoryId, name: categoryName }, description, amount }) => (
+              <TableRow key={id}>
+                <TableCell>
+                  <Typography color="textSecondary" variant="h6">
+                    {formatDate(date)}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography color="textSecondary" variant="h6">
+                    {categoryName}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography color="textSecondary" variant="h6">
+                    {description}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography color="textSecondary" variant="h6">
+                    {amount}
+                  </Typography>
+                </TableCell>
+                <TableCell style={{ width: '40px' }}>
+                  <IconButton
+                    aria-label="delete"
+                    color="primary"
+                    onClick={() =>
+                      onEditExpenseClickHandler({
+                        id,
+                        date,
+                        category: { name: categoryName, id: categoryId },
+                        description,
+                        amount,
+                      })
+                    }
+                  >
+                    <FeatherIcon icon="edit" width="20" height="20" />
+                  </IconButton>
+                  <IconButton aria-label="delete" color="error" onClick={() => setIsDeleteExpenseDialogOpen(true)}>
+                    <FeatherIcon icon="trash" width="20" height="20" />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
       <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
-        <Pagination count={8} color="secondary" />
+        <Pagination count={8} page={page} color="secondary" onChange={handlePageChange} />
       </Box>
       <AddEditExpenseDialog
         open={isAddExpenseDialogOpen}

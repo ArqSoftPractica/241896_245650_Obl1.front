@@ -1,16 +1,42 @@
 import { Grid } from '@mui/material';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import CategoriesChart from 'src/components/categories/chart/CategoriesChart';
 import FullLayout from 'src/layouts/FullLayout';
 import ExpensesTable from '../src/components/expenses/ExpensesTable';
 import { NextPageWithLayout } from './_app';
 
 const ExpensesPage: NextPageWithLayout = () => {
+  const [fromDate, setFromDate] = useState<Date>(() => {
+    const todayDate = new Date();
+    return new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);
+  });
+
+  const [toDate, setToDate] = useState<Date>(() => {
+    return new Date();
+  });
+
+  const handleFromDateChange = (date: Date | null): void => {
+    if (date) {
+      setFromDate(date);
+    }
+  };
+
+  const handleToDateChange = (date: Date | null): void => {
+    if (date) {
+      setToDate(date);
+    }
+  };
+
   return (
     <Grid container spacing={0}>
       <Grid item xs={12} lg={12}>
-        <ExpensesTable />
-        <CategoriesChart />
+        <ExpensesTable
+          fromDate={fromDate}
+          toDate={toDate}
+          handleFromDateChange={handleFromDateChange}
+          handleToDateChange={handleToDateChange}
+        />
+        <CategoriesChart fromDate={fromDate} toDate={toDate} />
       </Grid>
     </Grid>
   );
