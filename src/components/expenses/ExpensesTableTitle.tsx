@@ -18,9 +18,8 @@ const ExpensesTableTitle: React.FC<Props> = ({ setIsAddExpenseDialogOpen }) => {
             <DatePicker
               label="From"
               value="2022-05-24"
-              // onChange={() => {
-              //   return;
-              // }}
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
+              onChange={() => {}}
               renderInput={(params) => <TextField style={{ width: '150px' }} size="small" {...params} />}
             />
           </LocalizationProvider>
@@ -29,9 +28,8 @@ const ExpensesTableTitle: React.FC<Props> = ({ setIsAddExpenseDialogOpen }) => {
             <DatePicker
               label="To"
               value="2022-05-26"
-              // onChange={() => {
-              //   return;
-              // }}
+              // eslint-disable-next-line @typescript-eslint/no-empty-function
+              onChange={() => {}}
               renderInput={(params) => <TextField style={{ width: '150px' }} size="small" {...params} />}
             />
           </LocalizationProvider>

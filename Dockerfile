@@ -40,7 +40,6 @@ RUN adduser --system --uid 1001 nextjs
 
 # You only need to copy next.config.js if you are NOT using the default configuration
 COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 
 # Automatically leverage output traces to reduce image size
@@ -50,8 +49,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 80
 
-ENV PORT 3000
+ENV PORT 80 
 
 CMD ["node", "server.js"]

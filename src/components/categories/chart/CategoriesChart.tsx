@@ -1,11 +1,12 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
+import { ApexOptions } from 'apexcharts';
 import BaseCard from '../../baseCard/BaseCard';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const CategoriesChart = () => {
-  const categoriesChartOptions = {
+  const categoriesChartOptions: ApexOptions & { plotOptions: { bar: { endingShape: string } } } = {
     grid: {
       show: true,
       borderColor: 'transparent',
