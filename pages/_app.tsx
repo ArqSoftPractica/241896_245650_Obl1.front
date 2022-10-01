@@ -2,9 +2,11 @@ import * as React from 'react';
 import Head from 'next/head';
 import { NextPage } from 'next';
 import { AppProps } from 'next/dist/shared/lib/router/router';
+import { ToastContainer } from 'react-toastify';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import '../styles/style.css';
+import 'react-toastify/dist/ReactToastify.css';
 import theme from '../src/theme/theme';
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<P, IP> & {
@@ -28,6 +30,7 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
         <CssBaseline />
         {getLayout(<Component {...pageProps} />)}
       </ThemeProvider>
+      <ToastContainer />
     </>
   );
 };
