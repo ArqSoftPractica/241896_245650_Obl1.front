@@ -1,4 +1,4 @@
-const categoriesChartOptions = {
+const chartOptions = {
   grid: {
     show: true,
     borderColor: 'transparent',
@@ -70,4 +70,4 @@ const categoriesChartOptions = {
   },
 };
 
-export default categoriesChartOptions;
+export default chartOptions;

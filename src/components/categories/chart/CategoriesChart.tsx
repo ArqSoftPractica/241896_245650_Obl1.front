@@ -4,7 +4,7 @@ import { getExpensesPerCategory } from 'src/services/expenses.service';
 import { toast } from 'react-toastify';
 import formatDate from 'src/utils/formatDate';
 import BaseCard from '../../baseCard/BaseCard';
-import categoriesChartOptions from './ChartConfig';
+import chartOptions from './ChartConfig';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -16,6 +16,7 @@ export interface Props {
 const CategoriesChart: React.FC<Props> = ({ fromDate, toDate }) => {
   const [chartData, setChartData] = React.useState<ApexAxisChartSeries | ApexNonAxisChartSeries | undefined>();
   const [categories, setCategories] = React.useState<string[]>();
+  const [categoriesChartOptions, setCategoriesChartOptions] = React.useState(chartOptions);
 
   useEffect(() => {
     getExpensesPerCategory({ fromDate, toDate })
@@ -32,7 +33,17 @@ const CategoriesChart: React.FC<Props> = ({ fromDate, toDate }) => {
 
   const periodOfData = `${formatDate(fromDate)} - ${formatDate(toDate)}`;
 
-  categoriesChartOptions.xaxis.categories = categories && categories?.length > 0 ? categories : [''];
+  useEffect(() => {
+    if (categories) {
+      setCategoriesChartOptions((prev) => ({
+        ...prev,
+        xaxis: {
+          ...prev.xaxis,
+          categories,
+        },
+      }));
+    }
+  }, [categories]);
 
   return (
     <BaseCard title={`Expenses per Category (${periodOfData})`}>
