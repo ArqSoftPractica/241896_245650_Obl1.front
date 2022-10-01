@@ -6,9 +6,19 @@ import FeatherIcon from 'feather-icons-react';
 
 export interface Props {
   setIsAddExpenseDialogOpen: Dispatch<SetStateAction<boolean>>;
+  fromDate: Date;
+  toDate: Date;
+  handleFromDateChange: (date: Date | null) => void;
+  handleToDateChange: (date: Date | null) => void;
 }
 
-const ExpensesTableTitle: React.FC<Props> = ({ setIsAddExpenseDialogOpen }) => {
+const ExpensesTableTitle: React.FC<Props> = ({
+  setIsAddExpenseDialogOpen,
+  fromDate,
+  toDate,
+  handleFromDateChange,
+  handleToDateChange,
+}) => {
   return (
     <Box p={2} display="flex" alignItems="center" justifyContent="space-between" marginY={1}>
       <Box display="flex">
@@ -17,10 +27,9 @@ const ExpensesTableTitle: React.FC<Props> = ({ setIsAddExpenseDialogOpen }) => {
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="From"
-              value="2022-05-24"
-              // onChange={() => {
-              //   return;
-              // }}
+              value={fromDate}
+              onChange={handleFromDateChange}
+              maxDate={toDate}
               renderInput={(params) => <TextField style={{ width: '150px' }} size="small" {...params} />}
             />
           </LocalizationProvider>
@@ -28,10 +37,10 @@ const ExpensesTableTitle: React.FC<Props> = ({ setIsAddExpenseDialogOpen }) => {
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="To"
-              value="2022-05-26"
-              // onChange={() => {
-              //   return;
-              // }}
+              value={toDate}
+              onChange={handleToDateChange}
+              minDate={fromDate}
+              maxDate={new Date()}
               renderInput={(params) => <TextField style={{ width: '150px' }} size="small" {...params} />}
             />
           </LocalizationProvider>
