@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Button, Card, Chip, Typography } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
+import { getApiKey, refreshApiKey } from 'src/services/api-key.service';
+import { toast } from 'react-toastify';
 import BaseDialog from '../baseDialog/BaseDialog';
 
 const AccessKey: React.FC<Record<string, never>> = () => {
   const [isRefreshKeyOpen, setIsRefreshKeyOpen] = useState<boolean>(false);
+  const [familyApiKey, setFamilyApiKey] = useState<string>('');
 
   const handleRefreshKeyOpen = () => {
     setIsRefreshKeyOpen(true);
@@ -15,9 +18,25 @@ const AccessKey: React.FC<Record<string, never>> = () => {
   };
 
   const handleRefreshKey = () => {
-    console.log('refresh key');
+    refreshApiKey()
+      .then(({ message }) => {
+        toast.success(message);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
     handleRefreshKeyClose();
   };
+
+  useEffect(() => {
+    getApiKey()
+      .then(({ apiKey }) => {
+        setFamilyApiKey(apiKey);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  }, []);
 
   return (
     <>
@@ -29,7 +48,7 @@ const AccessKey: React.FC<Record<string, never>> = () => {
           <Chip
             variant="outlined"
             disabled
-            label="API-KEY-123e4567-e89b-12d3-a456-426614174000"
+            label={familyApiKey}
             sx={{ borderRadius: '5px', fontSize: '16px' }}
             size="medium"
           />
