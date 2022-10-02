@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
   Typography,
@@ -13,58 +13,63 @@ import {
 } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 import { Category } from 'src/interfaces/Category';
+import { getCategories } from 'src/services/categories.service';
+import { toast } from 'react-toastify';
 import BaseCard from '../../baseCard/BaseCard';
 import CategoriesTableTitle from './CategoriesTableTitle';
 import DeleteCategoryDialog from './dialogs/DeleteCategoryDialog';
-import AddEditCategoryDialog from './dialogs/AddEditCategoryDialog';
-
-const categories: Category[] = [
-  {
-    id: 1,
-    description: 'Movie',
-    monthlySpendingLimit: 213123,
-    name: 'Entertainment',
-    image: 'entertainment',
-  },
-  {
-    id: 2,
-    description: 'Burgers & Fries',
-    monthlySpendingLimit: 2123,
-    name: 'Food',
-    image: 'food',
-  },
-];
+import AddCategoryDialog from './dialogs/AddCategoryDialog';
+import EditCategoryDialog from './dialogs/EditCategoryDialog';
+import { getCategoryImagePath } from './CategoryImages';
 
 const categoriesTableColumns = ['Name', 'Description', 'Image', 'Monthly Spending Limit', ''];
 
-const CategoriesTable: React.FC<Record<string, never>> = () => {
+const CATEGORIES_PER_PAGE = 3;
+
+const Categories: React.FC<Record<string, never>> = () => {
   const [isDeleteCategoryDialogOpen, setIsDeleteCategoryDialogOpen] = useState<boolean>(false);
   const [isAddCategoryDialogOpen, setIsAddCategoryDialogOpen] = useState<boolean>(false);
   const [isEditCategoryDialogOpen, setIsEditCategoryDialogOpen] = useState<boolean>(false);
-  const [editedCategory, setEditedCategory] = useState<Category>();
-
-  const onAddCategoryHandler = (): void => {
-    console.log('added');
-    console.log('reloads categories');
-    setIsAddCategoryDialogOpen(false);
-  };
-
-  const onDeleteCategoryHandler = (): void => {
-    console.log('deleted');
-    console.log('reloads categories');
-    setIsDeleteCategoryDialogOpen(false);
-  };
-
-  const onEditCategoryHandler = (): void => {
-    console.log('edited');
-    console.log('reloads expenses');
-    setIsEditCategoryDialogOpen(false);
-  };
+  const [selectedCategory, setSelectedCategory] = useState<Category>();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [page, setPage] = useState<number>(1);
 
   const onEditCategoryClickHandler = (category: Category): void => {
-    console.log('opens edit category dialog');
-    setEditedCategory(category);
+    setSelectedCategory(category);
     setIsEditCategoryDialogOpen(true);
+  };
+
+  const onDeleteCategoryClickHandler = (category: Category): void => {
+    setSelectedCategory(category);
+    setIsDeleteCategoryDialogOpen(true);
+  };
+
+  const onCloseDeleteCategoryDialogHandler = (): void => {
+    setIsDeleteCategoryDialogOpen(false);
+    setSelectedCategory(undefined);
+  };
+
+  const onCloseEditExpenseDialogHandler = (): void => {
+    setIsEditCategoryDialogOpen(false);
+    setSelectedCategory(undefined);
+  };
+
+  const fetchCategories = useCallback(() => {
+    getCategories({ take: CATEGORIES_PER_PAGE, skip: (page - 1) * CATEGORIES_PER_PAGE })
+      .then(({ categories: categoriesObtained }) => {
+        setCategories([...categoriesObtained]);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  }, [page]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [page, fetchCategories]);
+
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
   };
 
   return (
@@ -102,7 +107,11 @@ const CategoriesTable: React.FC<Record<string, never>> = () => {
                     {description}
                   </Typography>
                 </TableCell>
-                <TableCell>{/* <Image src={image} alt="Family" width={50} height={50} /> */}</TableCell>
+                <TableCell>
+                  {getCategoryImagePath(image) && (
+                    <Image src={getCategoryImagePath(image)} alt="Family" width={90} height={90} loading="lazy" />
+                  )}
+                </TableCell>
                 <TableCell style={{ width: '60px' }}>
                   <Typography color="textSecondary" variant="h6">
                     {monthlySpendingLimit}
@@ -124,7 +133,19 @@ const CategoriesTable: React.FC<Record<string, never>> = () => {
                   >
                     <FeatherIcon icon="edit" width="20" height="20" />
                   </IconButton>
-                  <IconButton aria-label="delete" color="error" onClick={() => setIsDeleteCategoryDialogOpen(true)}>
+                  <IconButton
+                    aria-label="delete"
+                    color="error"
+                    onClick={() =>
+                      onDeleteCategoryClickHandler({
+                        id,
+                        name,
+                        description,
+                        image,
+                        monthlySpendingLimit,
+                      })
+                    }
+                  >
                     <FeatherIcon icon="trash" width="20" height="20" />
                   </IconButton>
                 </TableCell>
@@ -133,27 +154,33 @@ const CategoriesTable: React.FC<Record<string, never>> = () => {
         </TableBody>
       </Table>
       <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
-        <Pagination count={8} color="secondary" />
+        <Pagination count={8} page={page} color="secondary" onChange={handlePageChange} />
       </Box>
-      <AddEditCategoryDialog
-        open={isAddCategoryDialogOpen}
-        onClose={() => setIsAddCategoryDialogOpen(false)}
-        onAddHandler={onAddCategoryHandler}
-      />
-      <AddEditCategoryDialog
-        open={isEditCategoryDialogOpen}
-        editMode
-        onClose={() => setIsEditCategoryDialogOpen(false)}
-        onAddHandler={onEditCategoryHandler}
-        currentValues={editedCategory}
-      />
-      <DeleteCategoryDialog
-        open={isDeleteCategoryDialogOpen}
-        onClose={() => setIsDeleteCategoryDialogOpen(false)}
-        onDeleteHandler={onDeleteCategoryHandler}
-      />
+      {isAddCategoryDialogOpen && (
+        <AddCategoryDialog
+          open={isAddCategoryDialogOpen}
+          onClose={() => setIsAddCategoryDialogOpen(false)}
+          fetchCategories={fetchCategories}
+        />
+      )}
+      {selectedCategory && (
+        <>
+          <DeleteCategoryDialog
+            open={isDeleteCategoryDialogOpen}
+            onClose={onCloseDeleteCategoryDialogHandler}
+            fetchCategories={fetchCategories}
+            category={selectedCategory}
+          />
+          <EditCategoryDialog
+            open={isEditCategoryDialogOpen}
+            onClose={onCloseEditExpenseDialogHandler}
+            categoryToEdit={selectedCategory}
+            fetchCategories={fetchCategories}
+          />
+        </>
+      )}
     </BaseCard>
   );
 };
 
-export default CategoriesTable;
+export default Categories;
