@@ -5,6 +5,7 @@ import { logIn } from 'src/services/auth.service';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import LogoIcon from 'src/layouts/logo/LogoIcon';
 import { toast } from 'react-toastify';
+import validator from 'validator';
 import BaseCard from '../baseCard/BaseCard';
 
 const Login: React.FC<Record<string, never>> = () => {
@@ -50,6 +51,7 @@ const Login: React.FC<Record<string, never>> = () => {
           variant="outlined"
           color="secondary"
           onClick={handleLogIn}
+          disabled={!validator.isEmail(email) || password.length < 8}
         >
           Log In
         </Button>

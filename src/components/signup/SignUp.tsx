@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { signUp } from 'src/services/register.service';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import LogoIcon from 'src/layouts/logo/LogoIcon';
+import validator from 'validator';
 import BaseCard from '../baseCard/BaseCard';
 
 const SignUp: React.FC<Record<string, never>> = () => {
@@ -74,6 +75,7 @@ const SignUp: React.FC<Record<string, never>> = () => {
           variant="outlined"
           color="secondary"
           onClick={handleSignUp}
+          disabled={!validator.isEmail(email) || password.length < 8 || !name || !familyName}
         >
           Sign Up
         </Button>

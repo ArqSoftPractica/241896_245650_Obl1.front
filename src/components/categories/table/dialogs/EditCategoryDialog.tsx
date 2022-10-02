@@ -55,6 +55,7 @@ const EditCategoryDialog: React.FC<DialogProps> = ({ onClose, open, categoryToEd
       acceptButtonText="Confirm"
       buttonsSize="large"
       size="sm"
+      acceptButtonDisabled={!name || !description}
     >
       <Stack spacing={3}>
         <Box display="flex" justifyContent="space-between" columnGap={2} marginTop={1}>

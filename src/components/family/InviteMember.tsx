@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { inviteNewMember } from 'src/services/register.service';
 import { toast } from 'react-toastify';
+import validator from 'validator';
 import BaseCard from '../baseCard/BaseCard';
 import Family from '../../../assets/images/users/family.svg';
 
@@ -79,6 +80,7 @@ const InviteFamilyMember: React.FC<Record<string, never>> = () => {
             variant="outlined"
             color="primary"
             onClick={handleInvite}
+            disabled={!validator.isEmail(email)}
           >
             Invite
           </Button>

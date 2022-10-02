@@ -46,7 +46,7 @@ const AddCategoryDialog: React.FC<DialogProps> = ({ onClose, open, fetchCategori
       acceptButtonText="Add"
       buttonsSize="large"
       size="sm"
-      acceptButtonDisabled={!name || !description || !monthlySpendingLimit}
+      acceptButtonDisabled={!name || !description}
     >
       <Stack spacing={3}>
         <Box display="flex" justifyContent="space-between" columnGap={2} marginTop={1}>

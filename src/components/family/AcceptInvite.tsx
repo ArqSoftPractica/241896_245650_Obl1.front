@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import LogoIcon from 'src/layouts/logo/LogoIcon';
 import { acceptInvite, getInvite } from 'src/services/register.service';
+import validator from 'validator';
 import BaseCard from '../baseCard/BaseCard';
 
 export interface Props {
@@ -107,6 +108,7 @@ const AcceptInvite: React.FC<Props> = ({ token }) => {
           variant="outlined"
           color="secondary"
           onClick={handleSignUp}
+          disabled={!validator.isEmail(userEmail) || password.length < 8 || !userName}
         >
           Sign Up
         </Button>
