@@ -19,6 +19,7 @@ import BaseCard from '../baseCard/BaseCard';
 import ExpensesTableTitle from './ExpensesTableTitle';
 import DeleteExpenseDialog from './dialogs/DeleteExpenseDialog';
 import AddEditExpenseDialog from './dialogs/AddEditExpenseDialog';
+import AddExpenseDialog from './dialogs/AddExpenseDialog';
 
 export interface Props {
   fromDate: Date;
@@ -39,12 +40,6 @@ const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, han
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [page, setPage] = useState<number>(1);
 
-  const onAddExpenseHandler = (): void => {
-    console.log('added');
-    console.log('reloads expenses');
-    setIsAddExpenseDialogOpen(false);
-  };
-
   const onEditExpenseHandler = (): void => {
     console.log('edited');
     console.log('reloads expenses');
@@ -63,6 +58,11 @@ const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, han
 
   const onCloseDeleteExpenseDialogHandler = (): void => {
     setIsDeleteExpenseDialogOpen(false);
+    setSelectedExpense(undefined);
+  };
+
+  const onCloseEditExpenseDialogHandler = (): void => {
+    setIsEditExpenseDialogOpen(false);
     setSelectedExpense(undefined);
   };
 
@@ -174,25 +174,29 @@ const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, han
       <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
         <Pagination count={8} page={page} color="secondary" onChange={handlePageChange} />
       </Box>
-      <AddEditExpenseDialog
-        open={isAddExpenseDialogOpen}
-        onClose={() => setIsAddExpenseDialogOpen(false)}
-        onAddHandler={onAddExpenseHandler}
-      />
-      <AddEditExpenseDialog
-        open={isEditExpenseDialogOpen}
-        editMode
-        onClose={() => setIsEditExpenseDialogOpen(false)}
-        onAddHandler={onEditExpenseHandler}
-        currentValues={selectedExpense}
-      />
-      {selectedExpense && (
-        <DeleteExpenseDialog
-          open={isDeleteExpenseDialogOpen}
-          onClose={onCloseDeleteExpenseDialogHandler}
+      {isAddExpenseDialogOpen && (
+        <AddExpenseDialog
+          open={isAddExpenseDialogOpen}
+          onClose={() => setIsAddExpenseDialogOpen(false)}
           fetchExpenses={fetchExpenses}
-          expense={selectedExpense}
         />
+      )}
+      {selectedExpense && (
+        <>
+          <DeleteExpenseDialog
+            open={isDeleteExpenseDialogOpen}
+            onClose={onCloseDeleteExpenseDialogHandler}
+            fetchExpenses={fetchExpenses}
+            expense={selectedExpense}
+          />
+          <AddEditExpenseDialog
+            open={isEditExpenseDialogOpen}
+            editMode
+            onClose={onCloseEditExpenseDialogHandler}
+            onAddHandler={onEditExpenseHandler}
+            currentValues={selectedExpense}
+          />
+        </>
       )}
     </BaseCard>
   );
