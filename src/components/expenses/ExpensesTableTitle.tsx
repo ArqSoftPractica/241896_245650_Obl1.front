@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Typography, Box, Button, TextField } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -19,6 +19,11 @@ const ExpensesTableTitle: React.FC<Props> = ({
   handleFromDateChange,
   handleToDateChange,
 }) => {
+  const [maxToDate] = useState<Date>(() => {
+    const todayDate = new Date();
+    return new Date(todayDate.getFullYear(), todayDate.getMonth() + 1, todayDate.getDate(), 23, 59, 59);
+  });
+
   return (
     <Box p={2} display="flex" alignItems="center" justifyContent="space-between" marginY={1}>
       <Box display="flex">
@@ -40,7 +45,7 @@ const ExpensesTableTitle: React.FC<Props> = ({
               value={toDate}
               onChange={handleToDateChange}
               minDate={fromDate}
-              maxDate={new Date()}
+              maxDate={maxToDate}
               renderInput={(params) => <TextField style={{ width: '150px' }} size="small" {...params} />}
             />
           </LocalizationProvider>

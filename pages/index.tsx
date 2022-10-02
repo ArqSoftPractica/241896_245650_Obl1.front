@@ -12,7 +12,8 @@ const ExpensesPage: NextPageWithLayout = () => {
   });
 
   const [toDate, setToDate] = useState<Date>(() => {
-    return new Date();
+    const todayDate = new Date();
+    return new Date(todayDate.getFullYear(), todayDate.getMonth() + 1, todayDate.getDate(), 23, 59, 59);
   });
 
   const handleFromDateChange = (date: Date | null): void => {
