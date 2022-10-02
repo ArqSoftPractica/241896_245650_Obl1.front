@@ -15,6 +15,7 @@ import { Expense } from 'src/interfaces/Expense';
 import { getExpenses } from 'src/services/expenses.service';
 import { toast } from 'react-toastify';
 import formatDate from 'src/utils/formatDate';
+import useUser from 'hooks/useUser';
 import BaseCard from '../baseCard/BaseCard';
 import ExpensesTableTitle from './ExpensesTableTitle';
 import DeleteExpenseDialog from './dialogs/DeleteExpenseDialog';
@@ -30,7 +31,13 @@ export interface Props {
 
 const EXPENSES_PER_PAGE = 4;
 
-const expensesTableColumns = ['Date', 'Category', 'Description', 'Amount', ''];
+const expensesTableColumns = [
+  { name: 'Date', roles: ['admin', 'user'] },
+  { name: 'Category', roles: ['admin', 'user'] },
+  { name: 'Description', roles: ['admin', 'user'] },
+  { name: 'Amount', roles: ['admin', 'user'] },
+  { name: '', roles: ['admin'] },
+];
 
 const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, handleToDateChange }) => {
   const [isDeleteExpenseDialogOpen, setIsDeleteExpenseDialogOpen] = useState<boolean>(false);
@@ -78,6 +85,12 @@ const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, han
     setPage(value);
   };
 
+  const { user } = useUser({ redirectTo: '/' });
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <BaseCard>
       <ExpensesTableTitle
@@ -96,13 +109,15 @@ const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, han
       >
         <TableHead>
           <TableRow>
-            {expensesTableColumns.map((column) => (
-              <TableCell key={column}>
-                <Typography color="textPrimary" variant="h6">
-                  {column}
-                </Typography>
-              </TableCell>
-            ))}
+            {expensesTableColumns.map(({ name, roles }) => {
+              return roles.includes(user.role) ? (
+                <TableCell key={name}>
+                  <Typography color="textPrimary" variant="h6">
+                    {name}
+                  </Typography>
+                </TableCell>
+              ) : null;
+            })}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -129,38 +144,40 @@ const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, han
                     {amount}
                   </Typography>
                 </TableCell>
-                <TableCell style={{ width: '40px' }}>
-                  <IconButton
-                    aria-label="delete"
-                    color="primary"
-                    onClick={() =>
-                      onEditExpenseClickHandler({
-                        id,
-                        date,
-                        category: { name: categoryName, id: categoryId },
-                        description,
-                        amount,
-                      })
-                    }
-                  >
-                    <FeatherIcon icon="edit" width="20" height="20" />
-                  </IconButton>
-                  <IconButton
-                    aria-label="delete"
-                    color="error"
-                    onClick={() =>
-                      onDeleteExpenseClickHandler({
-                        id,
-                        date,
-                        category: { name: categoryName, id: categoryId },
-                        description,
-                        amount,
-                      })
-                    }
-                  >
-                    <FeatherIcon icon="trash" width="20" height="20" />
-                  </IconButton>
-                </TableCell>
+                {user.role === 'admin' && (
+                  <TableCell style={{ width: '40px' }}>
+                    <IconButton
+                      aria-label="delete"
+                      color="primary"
+                      onClick={() =>
+                        onEditExpenseClickHandler({
+                          id,
+                          date,
+                          category: { name: categoryName, id: categoryId },
+                          description,
+                          amount,
+                        })
+                      }
+                    >
+                      <FeatherIcon icon="edit" width="20" height="20" />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      color="error"
+                      onClick={() =>
+                        onDeleteExpenseClickHandler({
+                          id,
+                          date,
+                          category: { name: categoryName, id: categoryId },
+                          description,
+                          amount,
+                        })
+                      }
+                    >
+                      <FeatherIcon icon="trash" width="20" height="20" />
+                    </IconButton>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
         </TableBody>

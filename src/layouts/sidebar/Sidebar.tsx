@@ -3,6 +3,7 @@ import NextLink from 'next/link';
 import { Box, Drawer, useMediaQuery, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 import { useRouter } from 'next/router';
+import useUser from 'hooks/useUser';
 import LogoIcon from '../logo/LogoIcon';
 import Menuitems from './MenuItems';
 import GrowthBanner from './GrowthBanner';
@@ -15,43 +16,50 @@ interface Props {
 
 const Sidebar: React.FC<Props> = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'));
+  const { user } = useUser({ redirectTo: '/' });
 
   const curl = useRouter();
   const location = curl.pathname;
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
   const SidebarContent = (
     <Box p={2} height="100%">
       <LogoIcon />
       <Box mt={2}>
         <List>
-          {Menuitems.map((item) => (
-            <List component="li" disablePadding key={item.title}>
-              <NextLink href={item.href}>
-                <ListItem
-                  button
-                  selected={location === item.href}
-                  sx={{
-                    mb: 1,
-                    ...(location === item.href && {
-                      color: 'white',
-                      backgroundColor: (theme) => `${theme.palette.primary.main}!important`,
-                    }),
-                  }}
-                >
-                  <ListItemIcon>
-                    <FeatherIcon
-                      style={{
-                        color: `${location === item.href ? 'white' : ''} `,
-                      }}
-                      icon={item.icon}
-                      width="20"
-                      height="20"
-                    />
-                  </ListItemIcon>
+          {Menuitems.map(({ title, icon, href, roles }) => (
+            <List component="li" disablePadding key={title}>
+              {roles.includes(user.role) && (
+                <NextLink href={href}>
+                  <ListItem
+                    button
+                    selected={location === href}
+                    sx={{
+                      mb: 1,
+                      ...(location === href && {
+                        color: 'white',
+                        backgroundColor: (theme) => `${theme.palette.primary.main}!important`,
+                      }),
+                    }}
+                  >
+                    <ListItemIcon>
+                      <FeatherIcon
+                        style={{
+                          color: `${location === href ? 'white' : ''} `,
+                        }}
+                        icon={icon}
+                        width="20"
+                        height="20"
+                      />
+                    </ListItemIcon>
 
-                  <ListItemText onClick={onSidebarClose}>{item.title}</ListItemText>
-                </ListItem>
-              </NextLink>
+                    <ListItemText onClick={onSidebarClose}>{title}</ListItemText>
+                  </ListItem>
+                </NextLink>
+              )}
             </List>
           ))}
         </List>

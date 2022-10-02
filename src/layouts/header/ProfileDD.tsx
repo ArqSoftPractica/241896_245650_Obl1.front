@@ -1,8 +1,7 @@
 import React from 'react';
 import FeatherIcon from 'feather-icons-react';
-import Image from 'next/image';
-import { Box, Menu, Typography, Link, ListItemButton, List, ListItemText, Button, Divider } from '@mui/material';
-import userimg from '../../../assets/images/users/user2.jpg';
+import { Box, Menu, Typography, Link, Button } from '@mui/material';
+import useUser from 'hooks/useUser';
 
 const ProfileDD: React.FC<Record<string, never>> = () => {
   const [anchorEl4, setAnchorEl4] = React.useState(null);
@@ -19,6 +18,14 @@ const ProfileDD: React.FC<Record<string, never>> = () => {
     localStorage.removeItem('token');
   };
 
+  const { user } = useUser({ redirectTo: '/' });
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
+  const { name } = user;
+
   return (
     <>
       <Button
@@ -29,7 +36,6 @@ const ProfileDD: React.FC<Record<string, never>> = () => {
         onClick={handleClick4}
       >
         <Box display="flex" alignItems="center">
-          <Image src={userimg} alt="Image" width="30" height="30" className="roundedCircle" />
           <Box
             sx={{
               display: {
@@ -49,7 +55,7 @@ const ProfileDD: React.FC<Record<string, never>> = () => {
                 ml: 1,
               }}
             >
-              Julia
+              {name}
             </Typography>
             <FeatherIcon icon="chevron-down" width="20" height="20" />
           </Box>

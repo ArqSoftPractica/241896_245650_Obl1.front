@@ -2,6 +2,7 @@ export interface MenuItems {
   title: string;
   icon: string;
   href: string;
+  roles: string[];
 }
 
 const Menuitems: MenuItems[] = [
@@ -9,16 +10,19 @@ const Menuitems: MenuItems[] = [
     title: 'Expenses',
     icon: 'dollar-sign',
     href: '/',
+    roles: ['admin', 'user'],
   },
   {
     title: 'Categories',
     icon: 'grid',
     href: '/categories',
+    roles: ['admin'],
   },
   {
     title: 'Manage Your Family',
     icon: 'users',
     href: '/manage-family',
+    roles: ['admin'],
   },
 ];
 
