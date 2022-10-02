@@ -20,6 +20,7 @@ const AccessKey: React.FC<Record<string, never>> = () => {
   const handleRefreshKey = () => {
     refreshApiKey()
       .then(({ message }) => {
+        getFamilyApiKey();
         toast.success(message);
       })
       .catch((err) => {
@@ -28,7 +29,7 @@ const AccessKey: React.FC<Record<string, never>> = () => {
     handleRefreshKeyClose();
   };
 
-  useEffect(() => {
+  const getFamilyApiKey = () => {
     getApiKey()
       .then(({ apiKey }) => {
         setFamilyApiKey(apiKey);
@@ -36,6 +37,10 @@ const AccessKey: React.FC<Record<string, never>> = () => {
       .catch((err) => {
         toast.error(err.message);
       });
+  };
+
+  useEffect(() => {
+    getFamilyApiKey();
   }, []);
 
   return (
