@@ -20,18 +20,18 @@ import AddEditCategoryDialog from './dialogs/AddEditCategoryDialog';
 
 const categories: Category[] = [
   {
-    id: '1',
+    id: 1,
     description: 'Movie',
     monthlySpendingLimit: 213123,
     name: 'Entertainment',
-    image: null,
+    image: 'entertainment',
   },
   {
-    id: '2',
+    id: 2,
     description: 'Burgers & Fries',
     monthlySpendingLimit: 2123,
     name: 'Food',
-    image: null,
+    image: 'food',
   },
 ];
 

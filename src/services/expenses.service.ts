@@ -175,3 +175,41 @@ export const deleteExpense = (request: DeleteExpenseRequest): Promise<Response> 
     });
   return addExpenseResponse;
 };
+
+export interface EditExpenseRequest {
+  expenseId: number;
+  newValues: {
+    amount: number;
+    date: Date;
+    description: string;
+    categoryId: number;
+  };
+}
+
+export const editExpense = (request: EditExpenseRequest): Promise<Response> => {
+  const { expenseId, newValues } = request;
+  const addExpenseResponse = fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/expenses/${expenseId}`, {
+    method: 'PUT',
+    body: JSON.stringify(newValues),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  })
+    .then(async (response) => {
+      const parsedResponse: Response = await response.json();
+      if (!response.ok) {
+        throw new InvalidRequestError(parsedResponse.message);
+      }
+      return parsedResponse;
+    })
+    .then((data) => data)
+    .catch((error) => {
+      console.error(error);
+      if (error instanceof InvalidRequestError) {
+        throw error;
+      }
+      throw new Error('Oops! Something went wrong. Please try again later.');
+    });
+  return addExpenseResponse;
+};

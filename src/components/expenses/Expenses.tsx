@@ -18,7 +18,7 @@ import formatDate from 'src/utils/formatDate';
 import BaseCard from '../baseCard/BaseCard';
 import ExpensesTableTitle from './ExpensesTableTitle';
 import DeleteExpenseDialog from './dialogs/DeleteExpenseDialog';
-import AddEditExpenseDialog from './dialogs/AddEditExpenseDialog';
+import EditExpenseDialog from './dialogs/EditExpenseDialog';
 import AddExpenseDialog from './dialogs/AddExpenseDialog';
 
 export interface Props {
@@ -39,12 +39,6 @@ const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, han
   const [selectedExpense, setSelectedExpense] = useState<Expense>();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [page, setPage] = useState<number>(1);
-
-  const onEditExpenseHandler = (): void => {
-    console.log('edited');
-    console.log('reloads expenses');
-    setIsEditExpenseDialogOpen(false);
-  };
 
   const onEditExpenseClickHandler = (expense: Expense): void => {
     setSelectedExpense(expense);
@@ -189,12 +183,11 @@ const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, han
             fetchExpenses={fetchExpenses}
             expense={selectedExpense}
           />
-          <AddEditExpenseDialog
+          <EditExpenseDialog
             open={isEditExpenseDialogOpen}
-            editMode
             onClose={onCloseEditExpenseDialogHandler}
-            onAddHandler={onEditExpenseHandler}
-            currentValues={selectedExpense}
+            expenseToEdit={selectedExpense}
+            fetchExpenses={fetchExpenses}
           />
         </>
       )}
