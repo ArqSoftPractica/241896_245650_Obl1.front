@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Box } from '@mui/material';
-import Growth from '../../../assets/images/users/Growth.svg';
+import Growth from '../../../assets/images/users/growth.svg';
 
 const GrowthBanner = () => (
   <Box pb={5} mt={5} marginTop={38.8}>

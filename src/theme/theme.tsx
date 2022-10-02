@@ -73,6 +73,6 @@ const theme = createTheme({
   components,
   shadows,
   typography,
-});
+} as any);
 
 export default theme;

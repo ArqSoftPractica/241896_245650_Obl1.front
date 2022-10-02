@@ -7,7 +7,7 @@ import userimg from '../../../assets/images/users/user2.jpg';
 const ProfileDD: React.FC<Record<string, never>> = () => {
   const [anchorEl4, setAnchorEl4] = React.useState(null);
 
-  const handleClick4 = ({ currentTarget }) => {
+  const handleClick4 = ({ currentTarget }: { currentTarget: any }) => {
     setAnchorEl4(currentTarget);
   };
 
