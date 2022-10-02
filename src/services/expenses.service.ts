@@ -106,3 +106,72 @@ export const getExpenses = (request: getExpensesRequest): Promise<GetExpensesRes
     });
   return signUpResponse;
 };
+
+export interface AddExpenseRequest {
+  amount: number;
+  date: Date;
+  description: string;
+  categoryId: number;
+}
+
+export interface Response {
+  message: string;
+}
+
+export const addExpense = (request: AddExpenseRequest): Promise<Response> => {
+  const addExpenseResponse = fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/expenses`, {
+    method: 'POST',
+    body: JSON.stringify(request),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  })
+    .then(async (response) => {
+      const parsedResponse: Response = await response.json();
+      if (!response.ok) {
+        throw new InvalidRequestError(parsedResponse.message);
+      }
+      return parsedResponse;
+    })
+    .then((data) => data)
+    .catch((error) => {
+      console.error(error);
+      if (error instanceof InvalidRequestError) {
+        throw error;
+      }
+      throw new Error('Oops! Something went wrong. Please try again later.');
+    });
+  return addExpenseResponse;
+};
+
+export interface DeleteExpenseRequest {
+  expenseId: number;
+}
+
+export const deleteExpense = (request: DeleteExpenseRequest): Promise<Response> => {
+  const { expenseId } = request;
+  const addExpenseResponse = fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/expenses/${expenseId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  })
+    .then(async (response) => {
+      const parsedResponse: Response = await response.json();
+      if (!response.ok) {
+        throw new InvalidRequestError(parsedResponse.message);
+      }
+      return parsedResponse;
+    })
+    .then((data) => data)
+    .catch((error) => {
+      console.error(error);
+      if (error instanceof InvalidRequestError) {
+        throw error;
+      }
+      throw new Error('Oops! Something went wrong. Please try again later.');
+    });
+  return addExpenseResponse;
+};

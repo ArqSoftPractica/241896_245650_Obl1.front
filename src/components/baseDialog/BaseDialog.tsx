@@ -7,6 +7,7 @@ export interface DialogProps {
   children: React.ReactNode;
   title: string;
   acceptButtonText?: string;
+  acceptButtonDisabled?: boolean;
   cancelButtonText?: string;
   cancelButton?: boolean;
   acceptButtonHandler: () => void;
@@ -25,6 +26,7 @@ const BaseDialog: React.FC<DialogProps> = ({
   cancelButtonText = 'No',
   buttonsSize = 'small',
   size = 'xs',
+  acceptButtonDisabled = false,
 }) => {
   return (
     <Dialog onClose={onClose} open={open} fullWidth maxWidth={size}>
@@ -39,6 +41,7 @@ const BaseDialog: React.FC<DialogProps> = ({
             color={cancelButton ? 'success' : 'primary'}
             size={buttonsSize}
             onClick={acceptButtonHandler}
+            disabled={acceptButtonDisabled}
           >
             {acceptButtonText}
           </Button>

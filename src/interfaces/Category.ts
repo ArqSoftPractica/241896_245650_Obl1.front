@@ -1,7 +1,7 @@
 export interface Category {
-  id: string;
+  id: number;
   name: string;
   description: string;
-  image: File | null;
+  image: string;
   monthlySpendingLimit: number;
 }

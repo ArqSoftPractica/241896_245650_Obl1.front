@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Typography,
   Table,
@@ -19,6 +19,7 @@ import BaseCard from '../baseCard/BaseCard';
 import ExpensesTableTitle from './ExpensesTableTitle';
 import DeleteExpenseDialog from './dialogs/DeleteExpenseDialog';
 import AddEditExpenseDialog from './dialogs/AddEditExpenseDialog';
+import AddExpenseDialog from './dialogs/AddExpenseDialog';
 
 export interface Props {
   fromDate: Date;
@@ -31,25 +32,13 @@ const EXPENSES_PER_PAGE = 4;
 
 const expensesTableColumns = ['Date', 'Category', 'Description', 'Amount', ''];
 
-const ExpensesTable: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, handleToDateChange }) => {
+const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, handleToDateChange }) => {
   const [isDeleteExpenseDialogOpen, setIsDeleteExpenseDialogOpen] = useState<boolean>(false);
   const [isAddExpenseDialogOpen, setIsAddExpenseDialogOpen] = useState<boolean>(false);
   const [isEditExpenseDialogOpen, setIsEditExpenseDialogOpen] = useState<boolean>(false);
-  const [editedExpense, setEditedExpense] = useState<Expense>();
+  const [selectedExpense, setSelectedExpense] = useState<Expense>();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [page, setPage] = useState<number>(1);
-
-  const onDeleteExpenseHandler = (): void => {
-    console.log('deleted');
-    console.log('reloads expenses');
-    setIsDeleteExpenseDialogOpen(false);
-  };
-
-  const onAddExpenseHandler = (): void => {
-    console.log('added');
-    console.log('reloads expenses');
-    setIsAddExpenseDialogOpen(false);
-  };
 
   const onEditExpenseHandler = (): void => {
     console.log('edited');
@@ -58,12 +47,26 @@ const ExpensesTable: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange
   };
 
   const onEditExpenseClickHandler = (expense: Expense): void => {
-    console.log('opens edit expense dialog');
-    setEditedExpense(expense);
+    setSelectedExpense(expense);
     setIsEditExpenseDialogOpen(true);
   };
 
-  useEffect(() => {
+  const onDeleteExpenseClickHandler = (expense: Expense): void => {
+    setSelectedExpense(expense);
+    setIsDeleteExpenseDialogOpen(true);
+  };
+
+  const onCloseDeleteExpenseDialogHandler = (): void => {
+    setIsDeleteExpenseDialogOpen(false);
+    setSelectedExpense(undefined);
+  };
+
+  const onCloseEditExpenseDialogHandler = (): void => {
+    setIsEditExpenseDialogOpen(false);
+    setSelectedExpense(undefined);
+  };
+
+  const fetchExpenses = useCallback(() => {
     getExpenses({ fromDate, toDate, take: EXPENSES_PER_PAGE, skip: (page - 1) * EXPENSES_PER_PAGE })
       .then(({ expenses: expensesObtained }) => {
         setExpenses([...expensesObtained]);
@@ -72,6 +75,10 @@ const ExpensesTable: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange
         toast.error(err.message);
       });
   }, [fromDate, toDate, page]);
+
+  useEffect(() => {
+    fetchExpenses();
+  }, [fromDate, toDate, page, fetchExpenses]);
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -144,7 +151,19 @@ const ExpensesTable: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange
                   >
                     <FeatherIcon icon="edit" width="20" height="20" />
                   </IconButton>
-                  <IconButton aria-label="delete" color="error" onClick={() => setIsDeleteExpenseDialogOpen(true)}>
+                  <IconButton
+                    aria-label="delete"
+                    color="error"
+                    onClick={() =>
+                      onDeleteExpenseClickHandler({
+                        id,
+                        date,
+                        category: { name: categoryName, id: categoryId },
+                        description,
+                        amount,
+                      })
+                    }
+                  >
                     <FeatherIcon icon="trash" width="20" height="20" />
                   </IconButton>
                 </TableCell>
@@ -155,25 +174,32 @@ const ExpensesTable: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange
       <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
         <Pagination count={8} page={page} color="secondary" onChange={handlePageChange} />
       </Box>
-      <AddEditExpenseDialog
-        open={isAddExpenseDialogOpen}
-        onClose={() => setIsAddExpenseDialogOpen(false)}
-        onAddHandler={onAddExpenseHandler}
-      />
-      <AddEditExpenseDialog
-        open={isEditExpenseDialogOpen}
-        editMode
-        onClose={() => setIsEditExpenseDialogOpen(false)}
-        onAddHandler={onEditExpenseHandler}
-        currentValues={editedExpense}
-      />
-      <DeleteExpenseDialog
-        open={isDeleteExpenseDialogOpen}
-        onClose={() => setIsDeleteExpenseDialogOpen(false)}
-        onDeleteHandler={onDeleteExpenseHandler}
-      />
+      {isAddExpenseDialogOpen && (
+        <AddExpenseDialog
+          open={isAddExpenseDialogOpen}
+          onClose={() => setIsAddExpenseDialogOpen(false)}
+          fetchExpenses={fetchExpenses}
+        />
+      )}
+      {selectedExpense && (
+        <>
+          <DeleteExpenseDialog
+            open={isDeleteExpenseDialogOpen}
+            onClose={onCloseDeleteExpenseDialogHandler}
+            fetchExpenses={fetchExpenses}
+            expense={selectedExpense}
+          />
+          <AddEditExpenseDialog
+            open={isEditExpenseDialogOpen}
+            editMode
+            onClose={onCloseEditExpenseDialogHandler}
+            onAddHandler={onEditExpenseHandler}
+            currentValues={selectedExpense}
+          />
+        </>
+      )}
     </BaseCard>
   );
 };
 
-export default ExpensesTable;
+export default Expenses;
