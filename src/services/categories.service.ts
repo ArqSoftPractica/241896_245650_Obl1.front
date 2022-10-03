@@ -9,6 +9,7 @@ export interface getExpensesRequest {
 export interface GetCategoriesResponse {
   message: string;
   categories: Category[];
+  totalCategories: number;
 }
 
 export const getCategories = (request: getExpensesRequest): Promise<GetCategoriesResponse> => {

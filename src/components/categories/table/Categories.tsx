@@ -33,6 +33,7 @@ const Categories: React.FC<Record<string, never>> = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category>();
   const [categories, setCategories] = useState<Category[]>([]);
   const [page, setPage] = useState<number>(1);
+  const [quantityOfPages, setQuantityOfPages] = useState<number>(1);
 
   const onEditCategoryClickHandler = (category: Category): void => {
     setSelectedCategory(category);
@@ -56,8 +57,9 @@ const Categories: React.FC<Record<string, never>> = () => {
 
   const fetchCategories = useCallback(() => {
     getCategories({ take: CATEGORIES_PER_PAGE, skip: (page - 1) * CATEGORIES_PER_PAGE })
-      .then(({ categories: categoriesObtained }) => {
+      .then(({ categories: categoriesObtained, totalCategories }) => {
         setCategories([...categoriesObtained]);
+        setQuantityOfPages(Math.ceil(totalCategories / CATEGORIES_PER_PAGE));
       })
       .catch((err) => {
         toast.error(err.message);
@@ -154,7 +156,7 @@ const Categories: React.FC<Record<string, never>> = () => {
         </TableBody>
       </Table>
       <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
-        <Pagination count={8} page={page} color="secondary" onChange={handlePageChange} />
+        <Pagination count={quantityOfPages} page={page} color="secondary" onChange={handlePageChange} />
       </Box>
       {isAddCategoryDialogOpen && (
         <AddCategoryDialog
