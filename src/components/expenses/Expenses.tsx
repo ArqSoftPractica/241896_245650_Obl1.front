@@ -79,7 +79,7 @@ const Expenses: React.FC<Props> = ({
     getExpenses({ fromDate, toDate, take: EXPENSES_PER_PAGE, skip: (page - 1) * EXPENSES_PER_PAGE })
       .then(({ expenses: expensesObtained, totalExpenses }) => {
         setExpenses([...expensesObtained]);
-        setQuantityOfPages(Math.ceil(totalExpenses / EXPENSES_PER_PAGE));
+        setQuantityOfPages(Math.max(1, Math.ceil(totalExpenses / EXPENSES_PER_PAGE)));
         fetchExpensesPerCategory();
       })
       .catch((err) => {
@@ -90,6 +90,15 @@ const Expenses: React.FC<Props> = ({
   useEffect(() => {
     fetchExpenses();
   }, [fromDate, toDate, page, fetchExpenses]);
+
+  useEffect(() => {
+    setPage((prevPage) => {
+      if (prevPage > quantityOfPages) {
+        return quantityOfPages;
+      }
+      return prevPage;
+    });
+  }, [quantityOfPages]);
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
