@@ -25,6 +25,8 @@ RUN apk add git
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
+ENV NEXT_PUBLIC_BACKEND_URL=http://obl1backv4-env.eba-yss3gpwt.us-east-1.elasticbeanstalk.com/api/v1
+
 RUN yarn build
 
 # Production image, copy all the files and run next
