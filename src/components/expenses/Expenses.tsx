@@ -27,6 +27,7 @@ export interface Props {
   toDate: Date;
   handleFromDateChange: (date: Date | null) => void;
   handleToDateChange: (date: Date | null) => void;
+  fetchExpensesPerCategory: () => void;
 }
 
 const EXPENSES_PER_PAGE = 4;
@@ -39,7 +40,13 @@ const expensesTableColumns = [
   { name: '', roles: ['admin'] },
 ];
 
-const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, handleToDateChange }) => {
+const Expenses: React.FC<Props> = ({
+  fromDate,
+  toDate,
+  handleFromDateChange,
+  handleToDateChange,
+  fetchExpensesPerCategory,
+}) => {
   const [isDeleteExpenseDialogOpen, setIsDeleteExpenseDialogOpen] = useState<boolean>(false);
   const [isAddExpenseDialogOpen, setIsAddExpenseDialogOpen] = useState<boolean>(false);
   const [isEditExpenseDialogOpen, setIsEditExpenseDialogOpen] = useState<boolean>(false);
@@ -73,24 +80,16 @@ const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, han
       .then(({ expenses: expensesObtained, totalExpenses }) => {
         setExpenses([...expensesObtained]);
         setQuantityOfPages(Math.ceil(totalExpenses / EXPENSES_PER_PAGE));
+        fetchExpensesPerCategory();
       })
       .catch((err) => {
         toast.error(err.message);
       });
-  }, [fromDate, toDate, page]);
+  }, [fromDate, toDate, page, fetchExpensesPerCategory]);
 
   useEffect(() => {
     fetchExpenses();
   }, [fromDate, toDate, page, fetchExpenses]);
-
-  useEffect(() => {
-    setPage((prevPage) => {
-      if (prevPage > quantityOfPages) {
-        return quantityOfPages;
-      }
-      return prevPage;
-    });
-  }, [quantityOfPages]);
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);

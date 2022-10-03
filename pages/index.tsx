@@ -1,11 +1,15 @@
 import { Grid } from '@mui/material';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import CategoriesChart from 'src/components/categories/chart/CategoriesChart';
 import FullLayout from 'src/layouts/FullLayout';
+import { getExpensesPerCategory } from 'src/services/expenses.service';
 import Expenses from '../src/components/expenses/Expenses';
 import { NextPageWithLayout } from './_app';
 
 const ExpensesPage: NextPageWithLayout = () => {
+  const [chartData, setChartData] = React.useState<ApexAxisChartSeries | ApexNonAxisChartSeries | undefined>();
+  const [categories, setCategories] = React.useState<string[]>();
   const [fromDate, setFromDate] = useState<Date>(() => {
     const todayDate = new Date();
     return new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);
@@ -28,6 +32,23 @@ const ExpensesPage: NextPageWithLayout = () => {
     }
   };
 
+  const fetchExpensesPerCategory = useCallback(() => {
+    getExpensesPerCategory({ fromDate, toDate })
+      .then(({ expensesPerCategory }) => {
+        const data = expensesPerCategory.length > 0 ? expensesPerCategory.map(({ totalAmount }) => +totalAmount) : [];
+        const categoriesData = expensesPerCategory.length > 0 ? expensesPerCategory.map(({ name }) => name) : [];
+        setChartData([{ data, name: 'Total Amount' }]);
+        setCategories(categoriesData);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  }, [fromDate, toDate]);
+
+  useEffect(() => {
+    fetchExpensesPerCategory();
+  }, [fromDate, toDate, fetchExpensesPerCategory]);
+
   return (
     <Grid container spacing={0}>
       <Grid item xs={12} lg={12}>
@@ -36,8 +57,9 @@ const ExpensesPage: NextPageWithLayout = () => {
           toDate={toDate}
           handleFromDateChange={handleFromDateChange}
           handleToDateChange={handleToDateChange}
+          fetchExpensesPerCategory={fetchExpensesPerCategory}
         />
-        <CategoriesChart fromDate={fromDate} toDate={toDate} />
+        <CategoriesChart fromDate={fromDate} toDate={toDate} chartData={chartData} categories={categories} />
       </Grid>
     </Grid>
   );
