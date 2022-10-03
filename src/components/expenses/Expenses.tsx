@@ -83,6 +83,15 @@ const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, han
     fetchExpenses();
   }, [fromDate, toDate, page, fetchExpenses]);
 
+  useEffect(() => {
+    setPage((prevPage) => {
+      if (prevPage > quantityOfPages) {
+        return quantityOfPages;
+      }
+      return prevPage;
+    });
+  }, [quantityOfPages]);
+
   const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };

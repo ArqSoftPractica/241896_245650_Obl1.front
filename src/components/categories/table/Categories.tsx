@@ -70,6 +70,15 @@ const Categories: React.FC<Record<string, never>> = () => {
     fetchCategories();
   }, [page, fetchCategories]);
 
+  useEffect(() => {
+    setPage((prevPage) => {
+      if (prevPage > quantityOfPages) {
+        return quantityOfPages;
+      }
+      return prevPage;
+    });
+  }, [quantityOfPages]);
+
   const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
