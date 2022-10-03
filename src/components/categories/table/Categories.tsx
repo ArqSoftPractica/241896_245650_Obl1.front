@@ -59,7 +59,7 @@ const Categories: React.FC<Record<string, never>> = () => {
     getCategories({ take: CATEGORIES_PER_PAGE, skip: (page - 1) * CATEGORIES_PER_PAGE })
       .then(({ categories: categoriesObtained, totalCategories }) => {
         setCategories([...categoriesObtained]);
-        setQuantityOfPages(Math.ceil(totalCategories / CATEGORIES_PER_PAGE));
+        setQuantityOfPages(Math.max(1, Math.ceil(totalCategories / CATEGORIES_PER_PAGE)));
       })
       .catch((err) => {
         toast.error(err.message);
@@ -69,6 +69,15 @@ const Categories: React.FC<Record<string, never>> = () => {
   useEffect(() => {
     fetchCategories();
   }, [page, fetchCategories]);
+
+  useEffect(() => {
+    setPage((prevPage) => {
+      if (prevPage > quantityOfPages) {
+        return quantityOfPages;
+      }
+      return prevPage;
+    });
+  }, [quantityOfPages]);
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
