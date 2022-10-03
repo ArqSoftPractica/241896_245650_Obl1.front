@@ -21,7 +21,7 @@ const ExpensesTableTitle: React.FC<Props> = ({
 }) => {
   const [maxToDate] = useState<Date>(() => {
     const todayDate = new Date();
-    return new Date(todayDate.getFullYear(), todayDate.getMonth() + 1, todayDate.getDate(), 23, 59, 59);
+    return new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate(), 23, 59, 59);
   });
 
   return (
@@ -35,6 +35,7 @@ const ExpensesTableTitle: React.FC<Props> = ({
               value={fromDate}
               onChange={handleFromDateChange}
               maxDate={toDate}
+              inputFormat="dd/MM/yyyy"
               renderInput={(params) => <TextField style={{ width: '150px' }} size="small" {...params} />}
             />
           </LocalizationProvider>
@@ -46,6 +47,7 @@ const ExpensesTableTitle: React.FC<Props> = ({
               onChange={handleToDateChange}
               minDate={fromDate}
               maxDate={maxToDate}
+              inputFormat="dd/MM/yyyy"
               renderInput={(params) => <TextField style={{ width: '150px' }} size="small" {...params} />}
             />
           </LocalizationProvider>

@@ -78,6 +78,7 @@ const AddExpenseDialog: React.FC<DialogProps> = ({ onClose, open, fetchExpenses 
                 setDate(newDate || new Date());
               }}
               maxDate={new Date()}
+              inputFormat="dd/MM/yyyy"
               renderInput={(params) => <TextField size="medium" {...params} />}
             />
           </LocalizationProvider>

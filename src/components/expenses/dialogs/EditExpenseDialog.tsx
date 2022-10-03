@@ -27,7 +27,7 @@ const EditExpenseDialog: React.FC<DialogProps> = ({ onClose, open, expenseToEdit
   const [date, setDate] = useState<Date>(currentDate);
   const [category, setCategory] = useState<number>(currentCategory.id);
   const [description, setDescription] = useState<string>(currentDescription);
-  const [amount, setAmount] = useState<number>(currentAmount);
+  const [amount, setAmount] = useState<number>(+currentAmount);
   const [categories, setCategories] = useState<Category[]>([]);
 
   const onEditExpenseHandler = (): void => {
@@ -76,7 +76,7 @@ const EditExpenseDialog: React.FC<DialogProps> = ({ onClose, open, expenseToEdit
             onChange={({ target: { value } }) => {
               setAmount(+value);
             }}
-            InputProps={{ inputProps: { min: 0 } }}
+            InputProps={{ inputProps: { min: 1 } }}
           />
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
@@ -86,6 +86,7 @@ const EditExpenseDialog: React.FC<DialogProps> = ({ onClose, open, expenseToEdit
                 setDate(newDate || new Date());
               }}
               maxDate={new Date()}
+              inputFormat="dd/MM/yyyy"
               renderInput={(params) => <TextField size="medium" {...params} />}
             />
           </LocalizationProvider>
