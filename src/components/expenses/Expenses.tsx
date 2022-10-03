@@ -46,6 +46,7 @@ const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, han
   const [selectedExpense, setSelectedExpense] = useState<Expense>();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [page, setPage] = useState<number>(1);
+  const [quantityOfPages, setQuantityOfPages] = useState<number>(1);
 
   const onEditExpenseClickHandler = (expense: Expense): void => {
     setSelectedExpense(expense);
@@ -69,8 +70,9 @@ const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, han
 
   const fetchExpenses = useCallback(() => {
     getExpenses({ fromDate, toDate, take: EXPENSES_PER_PAGE, skip: (page - 1) * EXPENSES_PER_PAGE })
-      .then(({ expenses: expensesObtained }) => {
+      .then(({ expenses: expensesObtained, totalExpenses }) => {
         setExpenses([...expensesObtained]);
+        setQuantityOfPages(Math.ceil(totalExpenses / EXPENSES_PER_PAGE));
       })
       .catch((err) => {
         toast.error(err.message);
@@ -183,7 +185,7 @@ const Expenses: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, han
         </TableBody>
       </Table>
       <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
-        <Pagination count={8} page={page} color="secondary" onChange={handlePageChange} />
+        <Pagination count={quantityOfPages} page={page} color="secondary" onChange={handlePageChange} />
       </Box>
       {isAddExpenseDialogOpen && (
         <AddExpenseDialog

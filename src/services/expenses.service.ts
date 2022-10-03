@@ -57,6 +57,7 @@ export interface getExpensesRequest {
 export interface GetExpensesResponse {
   message: string;
   expenses: Expense[];
+  totalExpenses: number;
 }
 
 export interface Expense {
