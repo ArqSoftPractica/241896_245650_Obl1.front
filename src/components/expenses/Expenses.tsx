@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Typography,
   Table,
@@ -104,7 +104,9 @@ const Expenses: React.FC<Props> = ({
     setPage(value);
   };
 
-  const { user } = useUser({ redirectTo: '/' });
+  const allowedRoles = useMemo(() => ['admin', 'user'], []);
+
+  const { user } = useUser({ redirectTo: '/', allowedRoles });
 
   if (!user) {
     return <div>Loading...</div>;

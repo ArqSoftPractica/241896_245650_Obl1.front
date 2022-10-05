@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import NextLink from 'next/link';
 import { Box, Drawer, useMediaQuery, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
@@ -16,7 +16,10 @@ interface Props {
 
 const Sidebar: React.FC<Props> = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'));
-  const { user } = useUser({ redirectTo: '/' });
+
+  const allowedRoles = useMemo(() => ['admin', 'user'], []);
+
+  const { user } = useUser({ redirectTo: '/', allowedRoles });
 
   const curl = useRouter();
   const location = curl.pathname;

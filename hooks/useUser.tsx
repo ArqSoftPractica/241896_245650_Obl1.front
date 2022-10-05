@@ -1,49 +1,35 @@
 import { useEffect, useState } from 'react';
 import router from 'next/router';
-import jwt from 'jsonwebtoken';
-
-interface User {
-  id: string;
-  name: string;
-  role: string;
-  email: string;
-}
+import { User } from 'src/interfaces/User';
 
 interface UseUserProps {
   redirectTo?: string;
-  roles?: string[];
+  allowedRoles: string[];
 }
 
-const useUser = ({ redirectTo = '/', roles }: UseUserProps) => {
+const useUser = ({ redirectTo = '/login', allowedRoles }: UseUserProps) => {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const secret = process.env.NEXT_PUBLIC_JWT_SECRET;
+    const userInfo = localStorage.getItem('user');
+    const parsedUser: User = userInfo ? JSON.parse(userInfo) : null;
 
-    if (!secret || !token) {
+    if (!parsedUser) {
       router.push('/login');
       return;
     }
 
-    try {
-      const decoded = jwt.verify(token, secret) as any;
+    if (allowedRoles) {
+      const isUserTypeAuthorized = allowedRoles.length > 0 && allowedRoles.includes(parsedUser.role);
 
-      if (roles) {
-        const isUserTypeAuthorized = roles.includes(decoded.user.role);
-
-        if (!isUserTypeAuthorized) {
-          router.push(redirectTo);
-          return;
-        }
+      if (!isUserTypeAuthorized) {
+        router.push(redirectTo);
+        return;
       }
-
-      decoded.user as User;
-      setUser(decoded.user);
-    } catch (e) {
-      router.push('/login');
     }
-  }, [redirectTo]);
+
+    setUser(parsedUser);
+  }, [redirectTo, allowedRoles]);
 
   return { user };
 };
