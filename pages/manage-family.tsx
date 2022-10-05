@@ -1,13 +1,15 @@
 import { Grid } from '@mui/material';
 import useUser from 'hooks/useUser';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useMemo } from 'react';
 import AccessKey from 'src/components/family/AccessKey';
 import InviteFamilyMember from 'src/components/family/InviteMember';
 import FullLayout from 'src/layouts/FullLayout';
 import { NextPageWithLayout } from './_app';
 
 const InvitePage: NextPageWithLayout = () => {
-  const { user } = useUser({ redirectTo: '/', roles: ['admin'] });
+  const allowedRoles = useMemo(() => ['admin'], []);
+
+  const { user } = useUser({ redirectTo: '/', allowedRoles });
 
   if (!user) {
     return <div>Loading...</div>;

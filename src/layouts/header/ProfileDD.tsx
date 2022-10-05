@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import FeatherIcon from 'feather-icons-react';
 import { Box, Menu, Typography, Link, Button } from '@mui/material';
 import useUser from 'hooks/useUser';
@@ -16,9 +16,12 @@ const ProfileDD: React.FC<Record<string, never>> = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   };
 
-  const { user } = useUser({ redirectTo: '/' });
+  const allowedRoles = useMemo(() => ['admin', 'user'], []);
+
+  const { user } = useUser({ redirectTo: '/', allowedRoles });
 
   if (!user) {
     return <div>Loading...</div>;
