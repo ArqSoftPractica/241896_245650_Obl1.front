@@ -47,7 +47,10 @@ const ExpensesPage: NextPageWithLayout = () => {
 
   useEffect(() => {
     fetchExpensesPerCategory();
-  }, [fromDate, toDate, fetchExpensesPerCategory]);
+    // eslint-disable-next-line no-console
+    console.log('fetchExpensesPerCategory');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, toDate]);
 
   return (
     <Grid container spacing={0}>
