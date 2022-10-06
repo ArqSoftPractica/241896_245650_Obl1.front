@@ -11,34 +11,32 @@ export interface Response {
   token: string;
 }
 
-export const logIn = (request: LogInRequest): Promise<Response> => {
-  const logInResponse = fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, {
-    method: 'POST',
-    body: JSON.stringify(request),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(async (response) => {
-      const parsedResponse: Response = await response.json();
-      if (!response.ok) {
-        throw new InvalidRequestError(parsedResponse.message);
-      }
-      return parsedResponse;
-    })
-    .then((data) => {
-      localStorage.setItem('token', data.token);
-      getUser().catch((err) => err);
-      return data;
-    })
-    .catch((error) => {
-      console.error(error);
-      if (error instanceof InvalidRequestError) {
-        throw error;
-      }
-      throw new Error('Oops! Something went wrong. Please try again later.');
+export const logIn = async (request: LogInRequest): Promise<Response> => {
+  try {
+    const logInResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, {
+      method: 'POST',
+      body: JSON.stringify(request),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-  return logInResponse;
+
+    const parsedResponse: Response = await logInResponse.json();
+    if (!logInResponse.ok) {
+      throw new InvalidRequestError(parsedResponse.message);
+    }
+
+    localStorage.setItem('token', parsedResponse.token);
+    await getUser().catch((err) => err);
+
+    return parsedResponse;
+  } catch (error) {
+    console.error(error);
+    if (error instanceof InvalidRequestError) {
+      throw error;
+    }
+    throw new Error('Oops! Something went wrong. Please try again later.');
+  }
 };
 
 export interface GetUserResponse {
@@ -46,31 +44,28 @@ export interface GetUserResponse {
   user: User;
 }
 
-export const getUser = (): Promise<GetUserResponse> => {
-  const getUserResponse = fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/users`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-  })
-    .then(async (response) => {
-      const parsedResponse: GetUserResponse = await response.json();
-      if (!response.ok) {
-        throw new InvalidRequestError(parsedResponse.message);
-      }
-      return parsedResponse;
-    })
-    .then((data) => {
-      localStorage.setItem('user', JSON.stringify(data.user));
-      return data;
-    })
-    .catch((error) => {
-      console.error(error);
-      if (error instanceof InvalidRequestError) {
-        throw error;
-      }
-      throw new Error('Oops! Something went wrong. Please try again later.');
+export const getUser = async (): Promise<GetUserResponse> => {
+  try {
+    const userResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/users`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     });
-  return getUserResponse;
+
+    const parsedResponse: GetUserResponse = await userResponse.json();
+    if (!userResponse.ok) {
+      throw new InvalidRequestError(parsedResponse.message);
+    }
+
+    localStorage.setItem('user', JSON.stringify(parsedResponse.user));
+    return parsedResponse;
+  } catch (error) {
+    console.error(error);
+    if (error instanceof InvalidRequestError) {
+      throw error;
+    }
+    throw new Error('Oops! Something went wrong. Please try again later.');
+  }
 };
