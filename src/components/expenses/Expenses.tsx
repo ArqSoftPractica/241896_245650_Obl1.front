@@ -87,7 +87,8 @@ const Expenses: React.FC<Props> = ({
       .catch((err) => {
         toast.error(err.message);
       });
-  }, [fromDate, toDate, page, fetchExpensesPerCategory]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, toDate, page]);
 
   useEffect(() => {
     fetchExpenses();
