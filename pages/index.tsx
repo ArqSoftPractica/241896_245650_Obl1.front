@@ -46,9 +46,9 @@ const ExpensesPage: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    fetchExpensesPerCategory();
     // eslint-disable-next-line no-debugger
     debugger;
+    fetchExpensesPerCategory();
     // eslint-disable-next-line no-console
     console.log('fetchExpensesPerCategory');
     // eslint-disable-next-line react-hooks/exhaustive-deps
