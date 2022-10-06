@@ -89,7 +89,8 @@ const Expenses: React.FC<Props> = ({
 
   useEffect(() => {
     fetchExpenses();
-  }, [fromDate, toDate, page, fetchExpenses]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, toDate, page]);
 
   useEffect(() => {
     setPage((prevPage) => {
