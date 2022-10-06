@@ -75,7 +75,7 @@ const Expenses: React.FC<Props> = ({
     setSelectedExpense(undefined);
   };
 
-  const fetchExpenses = useCallback(() => {
+  const fetchExpenses = () => {
     // eslint-disable-next-line no-console
     console.log('fetchExpenses callback');
     getExpenses({ fromDate, toDate, take: EXPENSES_PER_PAGE, skip: (page - 1) * EXPENSES_PER_PAGE })
@@ -87,7 +87,7 @@ const Expenses: React.FC<Props> = ({
       .catch((err) => {
         toast.error(err.message);
       });
-  }, [fromDate, toDate, page, fetchExpensesPerCategory]);
+  };
 
   useEffect(() => {
     fetchExpenses();

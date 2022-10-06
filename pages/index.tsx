@@ -32,7 +32,7 @@ const ExpensesPage: NextPageWithLayout = () => {
     }
   };
 
-  const fetchExpensesPerCategory = useCallback(() => {
+  const fetchExpensesPerCategory = () => {
     getExpensesPerCategory({ fromDate, toDate })
       .then(({ expensesPerCategory }) => {
         const data = expensesPerCategory.length > 0 ? expensesPerCategory.map(({ totalAmount }) => +totalAmount) : [];
@@ -43,7 +43,7 @@ const ExpensesPage: NextPageWithLayout = () => {
       .catch((err) => {
         toast.error(err.message);
       });
-  }, [fromDate, toDate]);
+  };
 
   useEffect(() => {
     fetchExpensesPerCategory();
