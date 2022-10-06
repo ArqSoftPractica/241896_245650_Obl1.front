@@ -94,7 +94,7 @@ const Expenses: React.FC<Props> = ({
     // eslint-disable-next-line no-console
     console.log('fetching expenses');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromDate, toDate, page]);
+  }, []);
 
   useEffect(() => {
     setPage((prevPage) => {
