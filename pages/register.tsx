@@ -14,6 +14,7 @@ const InvitePage: NextPageWithLayout = () => {
   if (!authorized) {
     return <div>Loading...</div>;
   }
+
   return (
     <Grid container spacing={0} display="flex" justifyContent="center">
       <Grid item lg={4}>

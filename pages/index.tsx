@@ -33,6 +33,7 @@ const ExpensesPage: NextPageWithLayout = () => {
   };
 
   const fetchExpensesPerCategory = useCallback(() => {
+    console.info('fetchExpensesPerCategory');
     getExpensesPerCategory({ fromDate, toDate })
       .then(({ expensesPerCategory }) => {
         const data = expensesPerCategory.length > 0 ? expensesPerCategory.map(({ totalAmount }) => +totalAmount) : [];
@@ -46,11 +47,9 @@ const ExpensesPage: NextPageWithLayout = () => {
   }, [fromDate, toDate]);
 
   useEffect(() => {
+    console.info('useEffect');
     fetchExpensesPerCategory();
-    // eslint-disable-next-line no-console
-    console.log('fetchExpensesPerCategory');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromDate, toDate]);
+  }, [fromDate, toDate, fetchExpensesPerCategory]);
 
   return (
     <Grid container spacing={0}>

@@ -67,7 +67,6 @@ const Sidebar: React.FC<Props> = ({ isMobileSidebarOpen, onSidebarClose, isSideb
           ))}
         </List>
       </Box>
-      <GrowthBanner />
     </Box>
   );
   return (

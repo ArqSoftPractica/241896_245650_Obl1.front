@@ -9,6 +9,7 @@ import {
   Pagination,
   Box,
   IconButton,
+  Button,
 } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 import { Income } from 'src/interfaces/Income';
@@ -16,11 +17,13 @@ import { getIncomes } from 'src/services/incomes.service';
 import { toast } from 'react-toastify';
 import formatDate from 'src/utils/formatDate';
 import useUser from 'hooks/useUser';
+import { getBalanceByEmail } from 'src/services/balance.service';
 import BaseCard from '../baseCard/BaseCard';
 import IncomesTableTitle from './IncomesTableTitle';
 import DeleteIncomeDialog from './dialogs/DeleteIncomeDialog';
 import EditIncomeDialog from './dialogs/EditIncomeDialog';
 import AddIncomeDialog from './dialogs/AddIncomeDialog';
+import AddRecurringIncomeDialog from './dialogs/AddRecurringIncomeDialog';
 
 export interface Props {
   fromDate: Date;
@@ -42,6 +45,7 @@ const incomesTableColumns = [
 const Incomes: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, handleToDateChange }) => {
   const [isDeleteIncomeDialogOpen, setIsDeleteIncomeDialogOpen] = useState<boolean>(false);
   const [isAddIncomeDialogOpen, setIsAddIncomeDialogOpen] = useState<boolean>(false);
+  const [isAddRecurringIncomeDialogOpen, setIsAddRecurringIncomeDialogOpen] = useState<boolean>(false);
   const [isEditIncomeDialogOpen, setIsEditIncomeDialogOpen] = useState<boolean>(false);
   const [selectedIncome, setSelectedIncome] = useState<Income>();
   const [incomes, setIncomes] = useState<Income[]>([]);
@@ -66,6 +70,16 @@ const Incomes: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, hand
   const onCloseEditIncomeDialogHandler = (): void => {
     setIsEditIncomeDialogOpen(false);
     setSelectedIncome(undefined);
+  };
+
+  const getBalance = (): void => {
+    getBalanceByEmail({ from: fromDate, to: toDate })
+      .then(({ message }) => {
+        toast.success(message);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
   };
 
   const fetchIncomes = useCallback(() => {
@@ -108,6 +122,7 @@ const Incomes: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, hand
     <BaseCard>
       <IncomesTableTitle
         setIsAddIncomeDialogOpen={setIsAddIncomeDialogOpen}
+        setIsAddRecurringIncomeDialogOpen={setIsAddRecurringIncomeDialogOpen}
         fromDate={fromDate}
         toDate={toDate}
         handleFromDateChange={handleFromDateChange}
@@ -195,16 +210,23 @@ const Incomes: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, hand
             ))}
         </TableBody>
       </Table>
-      <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
+      <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'space-between' }}>
+        <Button variant="outlined" style={{ marginRight: '12px' }} color="primary" onClick={getBalance}>
+          Send balance via email
+          <FeatherIcon icon="mail" width="20" height="20" style={{ marginLeft: '10px' }} />
+        </Button>
         <Pagination count={quantityOfPages} page={page} color="secondary" onChange={handlePageChange} />
       </Box>
-      {isAddIncomeDialogOpen && (
-        <AddIncomeDialog
-          open={isAddIncomeDialogOpen}
-          onClose={() => setIsAddIncomeDialogOpen(false)}
-          fetchIncomes={fetchIncomes}
-        />
-      )}
+      <AddIncomeDialog
+        open={isAddIncomeDialogOpen}
+        onClose={() => setIsAddIncomeDialogOpen(false)}
+        fetchIncomes={fetchIncomes}
+      />
+      <AddRecurringIncomeDialog
+        open={isAddRecurringIncomeDialogOpen}
+        onClose={() => setIsAddRecurringIncomeDialogOpen(false)}
+        fetchIncomes={fetchIncomes}
+      />
       {selectedIncome && (
         <>
           <DeleteIncomeDialog

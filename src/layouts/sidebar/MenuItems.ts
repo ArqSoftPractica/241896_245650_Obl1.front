@@ -22,7 +22,7 @@ const Menuitems: MenuItems[] = [
     title: 'Categories',
     icon: 'grid',
     href: '/categories',
-    roles: ['admin'],
+    roles: ['admin', 'user'],
   },
   {
     title: 'Manage Your Family',

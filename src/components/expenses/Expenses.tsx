@@ -9,6 +9,7 @@ import {
   Pagination,
   Box,
   IconButton,
+  Button,
 } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 import { Expense } from 'src/interfaces/Expense';
@@ -16,11 +17,13 @@ import { getExpenses } from 'src/services/expenses.service';
 import { toast } from 'react-toastify';
 import formatDate from 'src/utils/formatDate';
 import useUser from 'hooks/useUser';
+import { getBalanceByEmail } from 'src/services/balance.service';
 import BaseCard from '../baseCard/BaseCard';
 import ExpensesTableTitle from './ExpensesTableTitle';
 import DeleteExpenseDialog from './dialogs/DeleteExpenseDialog';
 import EditExpenseDialog from './dialogs/EditExpenseDialog';
 import AddExpenseDialog from './dialogs/AddExpenseDialog';
+import AddRecurringExpenseDialog from './dialogs/AddRecurringExpenseDialog';
 
 export interface Props {
   fromDate: Date;
@@ -49,6 +52,7 @@ const Expenses: React.FC<Props> = ({
 }) => {
   const [isDeleteExpenseDialogOpen, setIsDeleteExpenseDialogOpen] = useState<boolean>(false);
   const [isAddExpenseDialogOpen, setIsAddExpenseDialogOpen] = useState<boolean>(false);
+  const [isAddRecurringExpenseDialogOpen, setIsAddRecurringExpenseDialogOpen] = useState<boolean>(false);
   const [isEditExpenseDialogOpen, setIsEditExpenseDialogOpen] = useState<boolean>(false);
   const [selectedExpense, setSelectedExpense] = useState<Expense>();
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -76,8 +80,6 @@ const Expenses: React.FC<Props> = ({
   };
 
   const fetchExpenses = useCallback(() => {
-    // eslint-disable-next-line no-console
-    console.log('fetchExpenses callback');
     getExpenses({ fromDate, toDate, take: EXPENSES_PER_PAGE, skip: (page - 1) * EXPENSES_PER_PAGE })
       .then(({ expenses: expensesObtained, totalExpenses }) => {
         setExpenses([...expensesObtained]);
@@ -87,15 +89,21 @@ const Expenses: React.FC<Props> = ({
       .catch((err) => {
         toast.error(err.message);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromDate, toDate, page]);
+  }, [fromDate, toDate, page, fetchExpensesPerCategory]);
+
+  const getBalance = (): void => {
+    getBalanceByEmail({ from: fromDate, to: toDate })
+      .then(({ message }) => {
+        toast.success(message);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
 
   useEffect(() => {
     fetchExpenses();
-    // eslint-disable-next-line no-console
-    console.log('fetching expenses');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromDate, toDate, page]);
+  }, [fromDate, toDate, page, fetchExpenses]);
 
   useEffect(() => {
     setPage((prevPage) => {
@@ -122,6 +130,7 @@ const Expenses: React.FC<Props> = ({
     <BaseCard>
       <ExpensesTableTitle
         setIsAddExpenseDialogOpen={setIsAddExpenseDialogOpen}
+        setIsAddRecurringExpenseDialogOpen={setIsAddRecurringExpenseDialogOpen}
         fromDate={fromDate}
         toDate={toDate}
         handleFromDateChange={handleFromDateChange}
@@ -209,16 +218,23 @@ const Expenses: React.FC<Props> = ({
             ))}
         </TableBody>
       </Table>
-      <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'flex-end' }}>
+      <Box sx={{ paddingTop: '40px', paddingRight: '40px', display: 'flex', justifyContent: 'space-between' }}>
+        <Button variant="outlined" style={{ marginRight: '12px' }} color="primary" onClick={getBalance}>
+          Send balance via email
+          <FeatherIcon icon="mail" width="20" height="20" style={{ marginLeft: '10px' }} />
+        </Button>
         <Pagination count={quantityOfPages} page={page} color="secondary" onChange={handlePageChange} />
       </Box>
-      {isAddExpenseDialogOpen && (
-        <AddExpenseDialog
-          open={isAddExpenseDialogOpen}
-          onClose={() => setIsAddExpenseDialogOpen(false)}
-          fetchExpenses={fetchExpenses}
-        />
-      )}
+      <AddExpenseDialog
+        open={isAddExpenseDialogOpen}
+        onClose={() => setIsAddExpenseDialogOpen(false)}
+        fetchExpenses={fetchExpenses}
+      />
+      <AddRecurringExpenseDialog
+        open={isAddRecurringExpenseDialogOpen}
+        onClose={() => setIsAddRecurringExpenseDialogOpen(false)}
+        fetchExpenses={fetchExpenses}
+      />
       {selectedExpense && (
         <>
           <DeleteExpenseDialog

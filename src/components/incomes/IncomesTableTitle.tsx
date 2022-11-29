@@ -6,6 +6,7 @@ import FeatherIcon from 'feather-icons-react';
 
 export interface Props {
   setIsAddIncomeDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setIsAddRecurringIncomeDialogOpen: Dispatch<SetStateAction<boolean>>;
   fromDate: Date;
   toDate: Date;
   handleFromDateChange: (date: Date | null) => void;
@@ -14,6 +15,7 @@ export interface Props {
 
 const IncomesTableTitle: React.FC<Props> = ({
   setIsAddIncomeDialogOpen,
+  setIsAddRecurringIncomeDialogOpen,
   fromDate,
   toDate,
   handleFromDateChange,
@@ -53,10 +55,21 @@ const IncomesTableTitle: React.FC<Props> = ({
           </LocalizationProvider>
         </Box>
       </Box>
-      <Button variant="outlined" color="success" onClick={() => setIsAddIncomeDialogOpen(true)}>
-        <FeatherIcon icon="plus" width="20" height="20" style={{ marginRight: '10px' }} />
-        Add Income
-      </Button>
+      <Box>
+        <Button
+          variant="outlined"
+          style={{ marginRight: '12px' }}
+          color="info"
+          onClick={() => setIsAddRecurringIncomeDialogOpen(true)}
+        >
+          <FeatherIcon icon="plus" width="20" height="20" style={{ marginRight: '10px' }} />
+          Add Recurring Income
+        </Button>
+        <Button variant="outlined" color="success" onClick={() => setIsAddIncomeDialogOpen(true)}>
+          <FeatherIcon icon="plus" width="20" height="20" style={{ marginRight: '10px' }} />
+          Add Income
+        </Button>
+      </Box>
     </Box>
   );
 };
