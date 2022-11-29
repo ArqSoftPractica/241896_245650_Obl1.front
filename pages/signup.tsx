@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 import useSession from 'hooks/useSession';
 import React, { ReactElement } from 'react';
-import SignUp from 'src/components/signup/SignUp';
+import SignUp from 'src/components/signUp/SignUp';
 import AuthLayout from 'src/layouts/AuthLayout';
 import { NextPageWithLayout } from './_app';
 

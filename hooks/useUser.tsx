@@ -29,8 +29,7 @@ const useUser = ({ redirectTo = '/login', allowedRoles }: UseUserProps) => {
     }
 
     setUser(parsedUser);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [allowedRoles, redirectTo]);
 
   return { user };
 };

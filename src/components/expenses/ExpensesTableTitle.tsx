@@ -6,6 +6,7 @@ import FeatherIcon from 'feather-icons-react';
 
 export interface Props {
   setIsAddExpenseDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setIsAddRecurringExpenseDialogOpen: Dispatch<SetStateAction<boolean>>;
   fromDate: Date;
   toDate: Date;
   handleFromDateChange: (date: Date | null) => void;
@@ -14,6 +15,7 @@ export interface Props {
 
 const ExpensesTableTitle: React.FC<Props> = ({
   setIsAddExpenseDialogOpen,
+  setIsAddRecurringExpenseDialogOpen,
   fromDate,
   toDate,
   handleFromDateChange,
@@ -53,10 +55,21 @@ const ExpensesTableTitle: React.FC<Props> = ({
           </LocalizationProvider>
         </Box>
       </Box>
-      <Button variant="outlined" color="success" onClick={() => setIsAddExpenseDialogOpen(true)}>
-        <FeatherIcon icon="plus" width="20" height="20" style={{ marginRight: '10px' }} />
-        Add Expense
-      </Button>
+      <Box>
+        <Button
+          variant="outlined"
+          color="info"
+          style={{ marginRight: '12px' }}
+          onClick={() => setIsAddRecurringExpenseDialogOpen(true)}
+        >
+          <FeatherIcon icon="plus" width="20" height="20" style={{ marginRight: '10px' }} />
+          Add Recurring Expense
+        </Button>
+        <Button variant="outlined" color="success" onClick={() => setIsAddExpenseDialogOpen(true)}>
+          <FeatherIcon icon="plus" width="20" height="20" style={{ marginRight: '10px' }} />
+          Add Expense
+        </Button>
+      </Box>
     </Box>
   );
 };
