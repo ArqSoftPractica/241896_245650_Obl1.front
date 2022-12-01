@@ -35,14 +35,17 @@ export const subscribeToNotificationsOfOneCategory = (request: SubscriptionReque
 };
 
 export const unsubscribeToNotificationsOfOneCategory = (request: SubscriptionRequest): Promise<Response> => {
-  const subscribeResponse = fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/subscriptions/notifications`, {
-    method: 'DELETE',
-    body: JSON.stringify(request),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
+  const { categoryId } = request;
+  const subscribeResponse = fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/subscriptions/notifications?categoryId=${categoryId}`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     },
-  })
+  )
     .then(async (response) => {
       const parsedResponse: Response = await response.json();
       if (!response.ok) {

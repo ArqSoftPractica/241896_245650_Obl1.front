@@ -35,14 +35,17 @@ export const subscribeToAlertsOfOneCategory = (request: SubscriptionRequest): Pr
 };
 
 export const unsubscribeToAlertsOfOneCategory = (request: SubscriptionRequest): Promise<Response> => {
-  const subscribeResponse = fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/subscriptions/alerts`, {
-    method: 'DELETE',
-    body: JSON.stringify(request),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
+  const { categoryId } = request;
+  const subscribeResponse = fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/subscriptions/alerts?categoryId=${categoryId}`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     },
-  })
+  )
     .then(async (response) => {
       const parsedResponse: Response = await response.json();
       if (!response.ok) {

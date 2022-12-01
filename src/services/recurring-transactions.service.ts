@@ -12,7 +12,7 @@ export interface Response {
 }
 
 export const addRecurringTransaction = (request: AddRecurringTransactionRequest): Promise<Response> => {
-  const addTransactionResponse = fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/transactions`, {
+  const addTransactionResponse = fetch(`${process.env.NEXT_PUBLIC_TRANSACTIONS_URL}/transactions`, {
     method: 'POST',
     body: JSON.stringify(request),
     headers: {
