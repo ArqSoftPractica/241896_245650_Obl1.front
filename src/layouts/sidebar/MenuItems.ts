@@ -8,15 +8,21 @@ export interface MenuItems {
 const Menuitems: MenuItems[] = [
   {
     title: 'Expenses',
-    icon: 'dollar-sign',
+    icon: 'trending-down',
     href: '/',
+    roles: ['admin', 'user'],
+  },
+  {
+    title: 'Incomes',
+    icon: 'trending-up',
+    href: '/incomes',
     roles: ['admin', 'user'],
   },
   {
     title: 'Categories',
     icon: 'grid',
     href: '/categories',
-    roles: ['admin'],
+    roles: ['admin', 'user'],
   },
   {
     title: 'Manage Your Family',

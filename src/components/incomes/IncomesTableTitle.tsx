@@ -5,17 +5,17 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import FeatherIcon from 'feather-icons-react';
 
 export interface Props {
-  setIsAddExpenseDialogOpen: Dispatch<SetStateAction<boolean>>;
-  setIsAddRecurringExpenseDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setIsAddIncomeDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setIsAddRecurringIncomeDialogOpen: Dispatch<SetStateAction<boolean>>;
   fromDate: Date;
   toDate: Date;
   handleFromDateChange: (date: Date | null) => void;
   handleToDateChange: (date: Date | null) => void;
 }
 
-const ExpensesTableTitle: React.FC<Props> = ({
-  setIsAddExpenseDialogOpen,
-  setIsAddRecurringExpenseDialogOpen,
+const IncomesTableTitle: React.FC<Props> = ({
+  setIsAddIncomeDialogOpen,
+  setIsAddRecurringIncomeDialogOpen,
   fromDate,
   toDate,
   handleFromDateChange,
@@ -29,7 +29,7 @@ const ExpensesTableTitle: React.FC<Props> = ({
   return (
     <Box p={2} display="flex" alignItems="center" justifyContent="space-between" marginY={1}>
       <Box display="flex">
-        <Typography variant="h2">Expenses</Typography>
+        <Typography variant="h2">Incomes</Typography>
         <Box display="flex" alignItems="center" columnGap={1} marginLeft={5}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
@@ -58,20 +58,20 @@ const ExpensesTableTitle: React.FC<Props> = ({
       <Box>
         <Button
           variant="outlined"
-          color="info"
           style={{ marginRight: '12px' }}
-          onClick={() => setIsAddRecurringExpenseDialogOpen(true)}
+          color="info"
+          onClick={() => setIsAddRecurringIncomeDialogOpen(true)}
         >
           <FeatherIcon icon="plus" width="20" height="20" style={{ marginRight: '10px' }} />
-          Add Recurring Expense
+          Add Recurring Income
         </Button>
-        <Button variant="outlined" color="success" onClick={() => setIsAddExpenseDialogOpen(true)}>
+        <Button variant="outlined" color="success" onClick={() => setIsAddIncomeDialogOpen(true)}>
           <FeatherIcon icon="plus" width="20" height="20" style={{ marginRight: '10px' }} />
-          Add Expense
+          Add Income
         </Button>
       </Box>
     </Box>
   );
 };
 
-export default ExpensesTableTitle;
+export default IncomesTableTitle;

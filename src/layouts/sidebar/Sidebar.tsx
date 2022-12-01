@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import useUser from 'hooks/useUser';
 import LogoIcon from '../logo/LogoIcon';
 import Menuitems from './MenuItems';
-import GrowthBanner from './GrowthBanner';
 
 interface Props {
   isMobileSidebarOpen: boolean;
@@ -67,7 +66,6 @@ const Sidebar: React.FC<Props> = ({ isMobileSidebarOpen, onSidebarClose, isSideb
           ))}
         </List>
       </Box>
-      <GrowthBanner />
     </Box>
   );
   return (

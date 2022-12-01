@@ -12,30 +12,29 @@ import {
   Button,
 } from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
-import { Expense } from 'src/interfaces/Expense';
-import { getExpenses } from 'src/services/expenses.service';
+import { Income } from 'src/interfaces/Income';
+import { getIncomes } from 'src/services/incomes.service';
 import { toast } from 'react-toastify';
 import formatDate from 'src/utils/formatDate';
 import useUser from 'hooks/useUser';
 import { getBalanceByEmail } from 'src/services/balance.service';
 import BaseCard from '../baseCard/BaseCard';
-import ExpensesTableTitle from './ExpensesTableTitle';
-import DeleteExpenseDialog from './dialogs/DeleteExpenseDialog';
-import EditExpenseDialog from './dialogs/EditExpenseDialog';
-import AddExpenseDialog from './dialogs/AddExpenseDialog';
-import AddRecurringExpenseDialog from './dialogs/AddRecurringExpenseDialog';
+import IncomesTableTitle from './IncomesTableTitle';
+import DeleteIncomeDialog from './dialogs/DeleteIncomeDialog';
+import EditIncomeDialog from './dialogs/EditIncomeDialog';
+import AddIncomeDialog from './dialogs/AddIncomeDialog';
+import AddRecurringIncomeDialog from './dialogs/AddRecurringIncomeDialog';
 
 export interface Props {
   fromDate: Date;
   toDate: Date;
   handleFromDateChange: (date: Date | null) => void;
   handleToDateChange: (date: Date | null) => void;
-  fetchExpensesPerCategory: () => void;
 }
 
 const EXPENSES_PER_PAGE = 4;
 
-const expensesTableColumns = [
+const incomesTableColumns = [
   { name: 'Date', roles: ['admin', 'user'] },
   { name: 'Category', roles: ['admin', 'user'] },
   { name: 'Description', roles: ['admin', 'user'] },
@@ -43,53 +42,35 @@ const expensesTableColumns = [
   { name: '', roles: ['admin'] },
 ];
 
-const Expenses: React.FC<Props> = ({
-  fromDate,
-  toDate,
-  handleFromDateChange,
-  handleToDateChange,
-  fetchExpensesPerCategory,
-}) => {
-  const [isDeleteExpenseDialogOpen, setIsDeleteExpenseDialogOpen] = useState<boolean>(false);
-  const [isAddExpenseDialogOpen, setIsAddExpenseDialogOpen] = useState<boolean>(false);
-  const [isAddRecurringExpenseDialogOpen, setIsAddRecurringExpenseDialogOpen] = useState<boolean>(false);
-  const [isEditExpenseDialogOpen, setIsEditExpenseDialogOpen] = useState<boolean>(false);
-  const [selectedExpense, setSelectedExpense] = useState<Expense>();
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+const Incomes: React.FC<Props> = ({ fromDate, toDate, handleFromDateChange, handleToDateChange }) => {
+  const [isDeleteIncomeDialogOpen, setIsDeleteIncomeDialogOpen] = useState<boolean>(false);
+  const [isAddIncomeDialogOpen, setIsAddIncomeDialogOpen] = useState<boolean>(false);
+  const [isAddRecurringIncomeDialogOpen, setIsAddRecurringIncomeDialogOpen] = useState<boolean>(false);
+  const [isEditIncomeDialogOpen, setIsEditIncomeDialogOpen] = useState<boolean>(false);
+  const [selectedIncome, setSelectedIncome] = useState<Income>();
+  const [incomes, setIncomes] = useState<Income[]>([]);
   const [page, setPage] = useState<number>(1);
   const [quantityOfPages, setQuantityOfPages] = useState<number>(1);
 
-  const onEditExpenseClickHandler = (expense: Expense): void => {
-    setSelectedExpense(expense);
-    setIsEditExpenseDialogOpen(true);
+  const onEditIncomeClickHandler = (income: Income): void => {
+    setSelectedIncome(income);
+    setIsEditIncomeDialogOpen(true);
   };
 
-  const onDeleteExpenseClickHandler = (expense: Expense): void => {
-    setSelectedExpense(expense);
-    setIsDeleteExpenseDialogOpen(true);
+  const onDeleteIncomeClickHandler = (income: Income): void => {
+    setSelectedIncome(income);
+    setIsDeleteIncomeDialogOpen(true);
   };
 
-  const onCloseDeleteExpenseDialogHandler = (): void => {
-    setIsDeleteExpenseDialogOpen(false);
-    setSelectedExpense(undefined);
+  const onCloseDeleteIncomeDialogHandler = (): void => {
+    setIsDeleteIncomeDialogOpen(false);
+    setSelectedIncome(undefined);
   };
 
-  const onCloseEditExpenseDialogHandler = (): void => {
-    setIsEditExpenseDialogOpen(false);
-    setSelectedExpense(undefined);
+  const onCloseEditIncomeDialogHandler = (): void => {
+    setIsEditIncomeDialogOpen(false);
+    setSelectedIncome(undefined);
   };
-
-  const fetchExpenses = useCallback(() => {
-    getExpenses({ fromDate, toDate, take: EXPENSES_PER_PAGE, skip: (page - 1) * EXPENSES_PER_PAGE })
-      .then(({ expenses: expensesObtained, totalExpenses }) => {
-        setExpenses([...expensesObtained]);
-        setQuantityOfPages(Math.max(1, Math.ceil(totalExpenses / EXPENSES_PER_PAGE)));
-        fetchExpensesPerCategory();
-      })
-      .catch((err) => {
-        toast.error(err.message);
-      });
-  }, [fromDate, toDate, page, fetchExpensesPerCategory]);
 
   const getBalance = (): void => {
     getBalanceByEmail({ from: fromDate, to: toDate })
@@ -101,9 +82,20 @@ const Expenses: React.FC<Props> = ({
       });
   };
 
+  const fetchIncomes = useCallback(() => {
+    getIncomes({ fromDate, toDate, take: EXPENSES_PER_PAGE, skip: (page - 1) * EXPENSES_PER_PAGE })
+      .then(({ incomes: incomesObtained, totalIncomes }) => {
+        setIncomes([...incomesObtained]);
+        setQuantityOfPages(Math.max(1, Math.ceil(totalIncomes / EXPENSES_PER_PAGE)));
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  }, [fromDate, toDate, page]);
+
   useEffect(() => {
-    fetchExpenses();
-  }, [fromDate, toDate, page, fetchExpenses]);
+    fetchIncomes();
+  }, [fromDate, toDate, page, fetchIncomes]);
 
   useEffect(() => {
     setPage((prevPage) => {
@@ -128,9 +120,9 @@ const Expenses: React.FC<Props> = ({
 
   return (
     <BaseCard>
-      <ExpensesTableTitle
-        setIsAddExpenseDialogOpen={setIsAddExpenseDialogOpen}
-        setIsAddRecurringExpenseDialogOpen={setIsAddRecurringExpenseDialogOpen}
+      <IncomesTableTitle
+        setIsAddIncomeDialogOpen={setIsAddIncomeDialogOpen}
+        setIsAddRecurringIncomeDialogOpen={setIsAddRecurringIncomeDialogOpen}
         fromDate={fromDate}
         toDate={toDate}
         handleFromDateChange={handleFromDateChange}
@@ -145,7 +137,7 @@ const Expenses: React.FC<Props> = ({
       >
         <TableHead>
           <TableRow>
-            {expensesTableColumns.map(({ name, roles }) => {
+            {incomesTableColumns.map(({ name, roles }) => {
               return roles.includes(user.role) ? (
                 <TableCell key={name}>
                   <Typography color="textPrimary" variant="h6">
@@ -157,8 +149,8 @@ const Expenses: React.FC<Props> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {expenses.length > 0 &&
-            expenses.map(({ id, date, category: { id: categoryId, name: categoryName }, description, amount }) => (
+          {incomes.length > 0 &&
+            incomes.map(({ id, date, category: { id: categoryId, name: categoryName }, description, amount }) => (
               <TableRow key={id}>
                 <TableCell>
                   <Typography color="textSecondary" variant="h6">
@@ -186,7 +178,7 @@ const Expenses: React.FC<Props> = ({
                       aria-label="delete"
                       color="primary"
                       onClick={() =>
-                        onEditExpenseClickHandler({
+                        onEditIncomeClickHandler({
                           id,
                           date,
                           category: { name: categoryName, id: categoryId },
@@ -201,7 +193,7 @@ const Expenses: React.FC<Props> = ({
                       aria-label="delete"
                       color="error"
                       onClick={() =>
-                        onDeleteExpenseClickHandler({
+                        onDeleteIncomeClickHandler({
                           id,
                           date,
                           category: { name: categoryName, id: categoryId },
@@ -225,29 +217,29 @@ const Expenses: React.FC<Props> = ({
         </Button>
         <Pagination count={quantityOfPages} page={page} color="secondary" onChange={handlePageChange} />
       </Box>
-      <AddExpenseDialog
-        open={isAddExpenseDialogOpen}
-        onClose={() => setIsAddExpenseDialogOpen(false)}
-        fetchExpenses={fetchExpenses}
+      <AddIncomeDialog
+        open={isAddIncomeDialogOpen}
+        onClose={() => setIsAddIncomeDialogOpen(false)}
+        fetchIncomes={fetchIncomes}
       />
-      <AddRecurringExpenseDialog
-        open={isAddRecurringExpenseDialogOpen}
-        onClose={() => setIsAddRecurringExpenseDialogOpen(false)}
-        fetchExpenses={fetchExpenses}
+      <AddRecurringIncomeDialog
+        open={isAddRecurringIncomeDialogOpen}
+        onClose={() => setIsAddRecurringIncomeDialogOpen(false)}
+        fetchIncomes={fetchIncomes}
       />
-      {selectedExpense && (
+      {selectedIncome && (
         <>
-          <DeleteExpenseDialog
-            open={isDeleteExpenseDialogOpen}
-            onClose={onCloseDeleteExpenseDialogHandler}
-            fetchExpenses={fetchExpenses}
-            expense={selectedExpense}
+          <DeleteIncomeDialog
+            open={isDeleteIncomeDialogOpen}
+            onClose={onCloseDeleteIncomeDialogHandler}
+            fetchIncomes={fetchIncomes}
+            income={selectedIncome}
           />
-          <EditExpenseDialog
-            open={isEditExpenseDialogOpen}
-            onClose={onCloseEditExpenseDialogHandler}
-            expenseToEdit={selectedExpense}
-            fetchExpenses={fetchExpenses}
+          <EditIncomeDialog
+            open={isEditIncomeDialogOpen}
+            onClose={onCloseEditIncomeDialogHandler}
+            incomeToEdit={selectedIncome}
+            fetchIncomes={fetchIncomes}
           />
         </>
       )}
@@ -255,4 +247,4 @@ const Expenses: React.FC<Props> = ({
   );
 };
 
-export default Expenses;
+export default Incomes;
